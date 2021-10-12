@@ -1,0 +1,9 @@
+setup.py
+sicnumerical/__init__.py
+sicnumerical/diff.py
+sicnumerical.egg-info/PKG-INFO
+sicnumerical.egg-info/SOURCES.txt
+sicnumerical.egg-info/dependency_links.txt
+sicnumerical.egg-info/not-zip-safe
+sicnumerical.egg-info/requires.txt
+sicnumerical.egg-info/top_level.txt
