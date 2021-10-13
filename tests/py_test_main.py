@@ -15,5 +15,6 @@ for k in range(0, 401):
 	n = k / 4
 	arr = np.append(arr, [n ** 2 + n])
 
-integral = snum.find_integral_from_index(arr, 0, len(arr) - 1) / 4
+arr = np.array([x ** 2 + x for x in range(101)])
+integral = snum.find_integral_from_index(arr, 0, len(arr) - 1)
 print(integral)

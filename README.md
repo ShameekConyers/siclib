@@ -3,7 +3,7 @@
 A Collection of various Numerical approximation methods.
 
 # Corresponding Project and Documentation
-Can be found here <a href ="https://shameekconyers.com/projects/sicnumerical">here</a>
+Can be found here <a href ="https://shameekconyers.com/projects/numerical">here</a>
 
 # Installation Instructions
 <!-- ```shell

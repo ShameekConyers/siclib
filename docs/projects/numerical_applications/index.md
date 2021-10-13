@@ -89,11 +89,14 @@ Approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
 ..., (x_n, f(x_n))]$.
 
 #### Solution:
-will utilize Five-Point Midpoint Formula when $(x, f(x)) \in X$
+We will utilize "Five-Point Midpoint" when $(x, f(x)) \in X$
 
-#### Error Analysis:
-...
+#### Implementation Example:
+```python
+data = numpy.array([x ** 2 + x for x in range(11)])
 
+output = sicnumerical.find_derivative_from_index(data, 5)
+```
 
 ### Integration
 
@@ -101,9 +104,17 @@ will utilize Five-Point Midpoint Formula when $(x, f(x)) \in X$
 Approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
 given an array $X = [(x_1, f(x_1)),..., (x_n, f(x_n))]$.
 
-
-
 #### Solution:
-We will utilize composite Simpson's Rule
+We will utilize "Composite Simpson's Rule"
+
+#### Implementation Example:
+```python
+
+data = numpy.array([x ** 2 + x for x in range(11)])
+
+#note the only the interval [start, end - 1] is integrated over
+output = sicnumerical.find_integral_from_index(data, 6, 11)
+```
+
 <!--
 ### Interpolation -->
