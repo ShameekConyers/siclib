@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/..)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
-pybind11_add_module(_sicnumerical src/main.cpp src/differentiation.cpp)
+pybind11_add_module(
+	_sicnumerical src/main.cpp src/differentiation.cpp src/integration.cpp)

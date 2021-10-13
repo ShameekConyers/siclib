@@ -3,7 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
-
+// uses five point midpoint
 double find_derivative_from_index(
 	const pybind11::array_t<double> data,
 	int target_index

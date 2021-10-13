@@ -13,7 +13,7 @@ double find_derivative_from_index(const pybind11::array_t<double> data,
 	// boundary checks
 	if (target_index < 0 || target_index >= max_size) {
 		throw std::runtime_error(
-			"each point needs at least one neighbor on each side");
+			"Each point needs at least one neighbor side");
 	}
 
 

@@ -9,14 +9,17 @@ description:
 
 ## Numerical Analysis and it's Applications
 
-In this project is a collection of various Numerical Analysis techniques that
-I have coded in C++ and made available as a Python package interface from the
-source below.
+This project is a collection of various Numerical Analysis techniques that
+I have made available as a  Python package with the underlying implementation
+coded in C++ and made available from the source below.
 
 ## Source Code
 
 Source Code is available <a href=https://github.com/ShameekConyers/sicnumerical/tree/main>here</a>.
 
+## Package Documentation
+
+Documentation can be found here
 
 ## Main Reference
 
@@ -81,13 +84,26 @@ than using symbolic manipulation to find exact solutions to solve math problems
 ## Implemented Techniques
 ### Differentiation
 
-Problem: approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
+#### Problem:
+Approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
 ..., (x_n, f(x_n))]$.
+
+#### Solution:
+will utilize Five-Point Midpoint Formula when $(x, f(x)) \in X$
+
+#### Error Analysis:
+...
 
 
 ### Integration
 
-Problem: approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
+#### Problem:
+Approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
 given an array $X = [(x_1, f(x_1)),..., (x_n, f(x_n))]$.
 
-### Interpolation
+
+
+#### Solution:
+We will utilize composite Simpson's Rule
+<!--
+### Interpolation -->
