@@ -1,4 +1,7 @@
-from . import impl
+from . import _sicnumerical
 
-def diff(array, index):
-	return impl._diff(array, index)
+def find_derivative_from_index(array, index):
+	return _sicnumerical.diff_from_index(array, index)
+
+def find_derivative_from_value(array, index):
+	return _sicnumerical.diff_from_value(array, index)

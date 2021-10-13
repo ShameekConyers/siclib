@@ -11,7 +11,5 @@ double find_derivative_from_index(
 
 double find_derivative_from_value(
 	const pybind11::array_t<double> data,
-	int value
+	double value
 );
-
-double find_derivative_extrapolate();

@@ -15,9 +15,8 @@ source below.
 
 ## Source Code
 
-Source Code is available here.
+Source Code is available <a href=https://github.com/ShameekConyers/sicnumerical/tree/main>here</a>.
 
-Make sure to follow the installation instructions.
 
 ## Main Reference
 
@@ -77,3 +76,18 @@ than using symbolic manipulation to find exact solutions to solve math problems
 	Given we don't know the functional form of $f(Advertising)$ we cannot
 	solve for this explicitly and would have to use a numerical approximation
 	technique.
+
+
+## Implemented Techniques
+### Differentiation
+
+Problem: approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
+..., (x_n, f(x_n))]$.
+
+
+### Integration
+
+Problem: approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
+given an array $X = [(x_1, f(x_1)),..., (x_n, f(x_n))]$.
+
+### Interpolation

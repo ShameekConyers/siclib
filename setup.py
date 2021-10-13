@@ -133,7 +133,10 @@ class CMakeBuild(build_ext):
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-
+        # print(ext.sourcedir)
+        # print("####")
+        # print(os.listdir())
+        # print("####")
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp
         )
@@ -149,31 +152,39 @@ def renamer():
 # logic and declaration, and simpler if you include description/version in a file.
 setup_kwargs = dict(
     name="sicnumerical",
-    version="0.0.1",
+    version="0.0.4",
     author="Shameek Conyers",
-    description="A test project using pybind11 and CMake",
+		author_email="sic@usf.edu",
+    description="A Python Numerical Analysis Project",
     long_description="",
+		url="https://github.com/ShameekConyers/sicnumerical",
     ext_modules=[CMakeExtension("sicnumerical._sicnumerical")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
 		packages=['sicnumerical'],
     extras_require={"test": ["pytest"]},
+		package_data={'': ['*', 'LICENSE']},
+    install_requires=[],
 )
 
 set_result = setup(
 	**setup_kwargs
 )
-wheel_built = 'dist/{}-{}.whl'\
-	.format(set_result.command_obj['bdist_wheel'].wheel_dist_name,
-		'-'.join(set_result.command_obj['bdist_wheel'].get_tag()))
 
-target_wheel = convert_to_none_any(wheel_built)
 try:
-	shutil.copy(wheel_built, target_wheel)
-	os.remove(wheel_built)
+	wheel_built = 'dist/{}-{}.whl'\
+		.format(set_result.command_obj['bdist_wheel'].wheel_dist_name,
+			'-'.join(set_result.command_obj['bdist_wheel'].get_tag()))
+
+	target_wheel = convert_to_none_any(wheel_built)
+	try:
+		shutil.copy(wheel_built, target_wheel)
+		os.remove(wheel_built)
+	except:
+		dir_items = os.listdir('./dist')
+		for item in dir_items:
+			if "dist/" + item != target_wheel:
+				shutil.copy("dist/" + item, target_wheel)
+				os.remove("dist/" + item)
 except:
-	dir_items = os.listdir('./dist')
-	for item in dir_items:
-		if "dist/" + item != target_wheel:
-			shutil.copy("dist/" + item, target_wheel)
-			os.remove("dist/" + item)
+	pass

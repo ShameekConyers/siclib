@@ -1,3 +1,8 @@
+CMakeLists.txt
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
 setup.py
 sicnumerical/__init__.py
 sicnumerical/diff.py
@@ -7,3 +12,8 @@ sicnumerical.egg-info/dependency_links.txt
 sicnumerical.egg-info/not-zip-safe
 sicnumerical.egg-info/requires.txt
 sicnumerical.egg-info/top_level.txt
+src/differentiation.cpp
+src/differentiation.hpp
+src/integration.hpp
+src/interpolation.hpp
+src/main.cpp

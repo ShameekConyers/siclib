@@ -38,8 +38,12 @@ double find_derivative_from_index(const pybind11::array_t<double> data,
 	else {
 		est_deriv = buffer_ptr[max_size - 1] - buffer_ptr[max_size - 2];
 	}
-	// std::cout << buffer_ptr[max_size - 1] << "\n";
-	// std::cout << buffer_ptr[max_size - 2];
 
 	return est_deriv;
+}
+
+double find_derivative_from_value(const pybind11::array_t<double> data,
+	double value)
+{
+	return 0.0;
 }

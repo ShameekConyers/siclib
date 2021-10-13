@@ -3,8 +3,8 @@
 #include "./differentiation.hpp"
 
 
-PYBIND11_MODULE(impl, m)
+PYBIND11_MODULE(_sicnumerical, m)
 {
-	m.def("_diff", &find_derivative_from_index);
-
+	m.def("diff_from_index", &find_derivative_from_index);
+	m.def("diff_from_value", &find_derivative_from_value);
 }
