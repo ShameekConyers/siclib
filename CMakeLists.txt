@@ -7,4 +7,5 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
 pybind11_add_module(
-	_sicnumerical src/main.cpp src/differentiation.cpp src/integration.cpp)
+	_sicnumerical src/main.cpp src/differentiation.cpp src/integration.cpp
+	src/sol_equations.cpp)

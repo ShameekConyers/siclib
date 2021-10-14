@@ -19,7 +19,7 @@ Source Code is available <a href=https://github.com/ShameekConyers/sicnumerical/
 
 ## Package Documentation
 
-Documentation can be found here
+Documentation can be found below
 
 ## Main Reference
 
@@ -28,9 +28,9 @@ as the main reference.
 
 ---
 
-## Why use Numerical Analysis?
+## What is and Why use Numerical Analysis?
 
-Numerical is the study of algorithms that use numerical approximation rather
+Numerical Analysis is the study of algorithms that use numerical approximation rather
 than using symbolic manipulation to find exact solutions to solve math problems
 
 ### Example Applications
@@ -82,39 +82,58 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 
 ## Implemented Techniques
-### Differentiation
+- ### Solutions of Single Variable Equations
+  Approximate $x$ such that $f(x) = y$
 
-#### Problem:
-Approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
-..., (x_n, f(x_n))]$.
+	#### Solution:
+	We utilize the *Secant Method* which offers much better convergence
+	than binary search
 
-#### Solution:
-We will utilize "Five-Point Midpoint" when $(x, f(x)) \in X$
+	#### Implementation Example
+	```python
+	>>> import sicnumerical, numpy
+	>>> def example_func(x):
+	... 	return x ** 2 + 2 * x - 1
+	>>> target_y = 14
+	>>> sicnumerical.find_equation_solution(example_func, target_y)
+	1.0
+	```
 
-#### Implementation Example:
-```python
-data = numpy.array([x ** 2 + x for x in range(11)])
 
-output = sicnumerical.find_derivative_from_index(data, 5)
-```
+- ### Differentiation
 
-### Integration
+	Approximate $\dfrac{d f(x)}{d x}$ given an array $X = [(x_1, f(x_1)),
+	..., (x_n, f(x_n))]$.
 
-#### Problem:
-Approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
-given an array $X = [(x_1, f(x_1)),..., (x_n, f(x_n))]$.
+	#### Solution:
+	We will utilize *Five-Point Midpoint Method* when $(x, f(x)) \in X$
 
-#### Solution:
-We will utilize "Composite Simpson's Rule"
+	#### Implementation Example:
+	```python
+	>>> import sicnumerical, numpy
+	>>> data = numpy.array([x ** 2 + x for x in range(11)])
+	>>> x_value = 5
+	>>> sicnumerical.find_derivative_from_index(data, x_value)
+	11.0
+	```
 
-#### Implementation Example:
-```python
+- ### Integration
 
-data = numpy.array([x ** 2 + x for x in range(11)])
+	Approximate $F(x),\enspace F(x) = \int_{a}^{b}f(x)dx$
+	given an array $X = [(x_1, f(x_1)),..., (x_n, f(x_n))]$.
 
-#note the only the interval [start, end - 1] is integrated over
-output = sicnumerical.find_integral_from_index(data, 6, 11)
-```
+	#### Solution:
+	We will utilize "Composite Simpson's Rule"
+
+	#### Implementation Example:
+	```python
+	>>> import sicnumerical, numpy
+	>>> data = numpy.array([x ** 2 + x for x in range(11)])
+	>>> int_start, int_end = 6, 11
+	... #note the only the interval [start, end - 1] is integrated over
+	>>> sicnumerical.find_integral_from_index(data, int_start, int_end)
+	279.3333
+	```
 
 <!--
 ### Interpolation -->
