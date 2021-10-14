@@ -4,3 +4,5 @@ build/**
 dist
 sicnumerical.egg-info
 sicnumerical.egg-info/**
+
+**/__pycache__
