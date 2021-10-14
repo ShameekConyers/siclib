@@ -83,7 +83,7 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 ## Implemented Techniques
 - ### Solutions of Single Variable Equations
-  Approximate $x$ such that $f(x) = y$
+  Approximate $x$ such that $f(x) = y, \enspace x, y \in \R$
 
 	#### Solution:
 	We utilize the *Secant Method* which offers much better convergence
@@ -97,7 +97,14 @@ than using symbolic manipulation to find exact solutions to solve math problems
 	>>> target_y = 14
 	>>> sicnumerical.find_equation_solution(example_func, target_y)
 	1.0
+	>>> def no_solution(x):
+	... 	return x ** 2 + 1
+	>>> target_y = 0
+	>>> sicnumerical.find_equation_solution(no_solution, target_y)
+	None
 	```
+
+
 
 
 - ### Differentiation
