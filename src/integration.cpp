@@ -2,7 +2,7 @@
 #include <exception>
 #include <iostream>
 
-double find_integral_from_index(
+double integral_index_interval(
 	const pybind11::array_t<double> input,
 	size_t start_index,
 	size_t end_index)
@@ -22,7 +22,6 @@ double find_integral_from_index(
 			"Invalid indices"
 		);
 	}
-	end_index = end_index - 1;
 
 	double endpoints_index_sum = input_buffer[0]
 		+ input_buffer[input_size - 1];

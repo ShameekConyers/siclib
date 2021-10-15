@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 /opt/homebrew/anaconda3/bin/python setup.py bdist_wheel &&
 

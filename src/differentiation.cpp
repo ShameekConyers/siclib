@@ -2,7 +2,7 @@
 #include <exception>
 #include <iostream>
 
-double find_derivative_from_index(const pybind11::array_t<double> data,
+double derivative_at_index(const pybind11::array_t<double> data,
 	int target_index)
 {
 	pybind11::buffer_info buffer_data = data.request();
@@ -42,7 +42,7 @@ double find_derivative_from_index(const pybind11::array_t<double> data,
 	return est_deriv;
 }
 
-double find_derivative_from_value(const pybind11::array_t<double> data,
+double derivative_at_value(const pybind11::array_t<double> data,
 	double value)
 {
 	return 0.0;
