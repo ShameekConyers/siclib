@@ -151,17 +151,17 @@ def renamer():
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup_kwargs = dict(
-    name="sicnumerical",
+    name="pysiclib",
     version="0.0.4",
     author="Shameek Conyers",
 		author_email="sic@usf.edu",
     description="A Python Numerical Analysis Project",
     long_description="",
 		url="https://github.com/ShameekConyers/sicnumerical",
-    ext_modules=[CMakeExtension("sicnumerical._sicnumerical")],
+    ext_modules=[CMakeExtension("pysiclib._pysiclib")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-		packages=['sicnumerical'],
+		packages=['pysiclib'],
     extras_require={"test": ["pytest"]},
 		package_data={'': ['*', 'LICENSE']},
     install_requires=[],

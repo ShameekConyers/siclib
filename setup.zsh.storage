@@ -1,0 +1,12 @@
+clang++ -std=c++20 siclinalg/_main.cpp -o demo.out && ./demo.out
+
+
+export LDFLAGS="-L/opt/homebrew/opt/openblas/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/openblas/include"
+
+export LDFLAGS="-L/opt/homebrew/opt/lapack/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/lapack/include"
+
+-I /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers
+
+clang++ -std=c++20 siclinalg/_main.cpp -framework Accelerate -I /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers -o demo.out   && ./demo.out -

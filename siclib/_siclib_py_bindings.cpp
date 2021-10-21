@@ -1,13 +1,12 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-#include "./differentiation.hpp"
-#include "./integration.hpp"
-#include "./sol_equations.hpp"
-#include "./initial_value.hpp"
+#include "numerical.hpp"
+#include "linalg.hpp"
 
-PYBIND11_MODULE(_sicnumerical, m)
+PYBIND11_MODULE(_pysiclib, m)
 {
+	// numerical
 	m.def(
 		"derivative_at_index", &derivative_at_index);
 	m.def(
@@ -20,4 +19,6 @@ PYBIND11_MODULE(_sicnumerical, m)
 	m.def(
 		"initial_value_problem", &initial_value_problem
 	);
+
+	// linalg
 }
