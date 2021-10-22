@@ -4,7 +4,7 @@ import re
 import subprocess
 import sys
 
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 
 from setuptools.dist import Distribution
@@ -161,9 +161,9 @@ setup_kwargs = dict(
     ext_modules=[CMakeExtension("pysiclib._pysiclib")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-		packages=['pysiclib'],
+		packages=find_packages(),
     extras_require={"test": ["pytest"]},
-		package_data={'': ['*', 'LICENSE']},
+		package_data={'': ['*', 'LICENSE'], "pysiclib": ["**/*.pyi", "**/*.py"]},
     install_requires=[],
 )
 

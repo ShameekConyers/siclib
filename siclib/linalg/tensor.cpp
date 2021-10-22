@@ -1,4 +1,4 @@
-#include "Tensor.hpp"
+#include "tensor.hpp"
 #include <numeric>
 #include <exception>
 #include <iostream>
@@ -25,7 +25,7 @@ TensorView::TensorView(
 }
 
 TensorView::TensorView(
-	TensorView& other_view,
+	const TensorView& other_view,
 	std::vector<size_t> input_shape,
 	std::vector<size_t> input_stride,
 	size_t offset)
@@ -40,6 +40,11 @@ TensorView::TensorView(
 
 	m_storage = other_view.m_storage;
 	m_storage->m_data = input_data;
+}
+
+std::vector<double>& TensorView::get_buffer()
+{
+	return m_storage->m_data;
 }
 
 TensorView TensorView::deep_copy()
@@ -99,7 +104,7 @@ TensorView TensorView::operator+ (TensorView& other)
 
 TensorView TensorView::binary_element_wise_op(TensorView& other, std::function<double(double, double)>  binary_op)
 {
-	// TODO
+
 	int c_idx = 0;
 	int counter = 0;
 	size_t cumulative_prod = 1;
@@ -219,18 +224,18 @@ void TensorView::set_shape_stride(const std::vector<double>& input_data,
 		input_shape = { input_data.size() };
 	}
 
-
 	if (input_stride.size() > input_shape.size()) {
-		throw std::runtime_error("invalid stride");
+		throw std::runtime_error("invalid stride e1");
 	}
 	input_stride.resize(input_shape.size(), 1);
 	size_t shape_prod = 1;
 	for (size_t i = 0; i < input_stride.size(); i++) {
 		if (input_stride[i] > input_shape[i]) {
-			throw std::runtime_error("invalid stride");
+
+			throw std::runtime_error("invalid stride e2");
 		}
 		if (input_shape[i] % input_stride[i] != 0) {
-			throw std::runtime_error("invalid stride");
+			throw std::runtime_error("invalid stride e3");
 		}
 		shape_prod = input_shape[i] * input_stride[i];
 	}

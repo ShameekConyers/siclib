@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4...3.18)
 project(pysiclib LANGUAGES CXX)
 
-# set(CMAKE_OSX_ARCHITECTURES x86_64)
+set(CMAKE_OSX_ARCHITECTURES x86_64)
 set(CMAKE_CXX_STANDARD 20)
 # set(Python_ROOT_DIR "/opt/homebrew/anaconda3/bin/python")
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/..)

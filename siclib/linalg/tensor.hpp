@@ -26,11 +26,15 @@ struct TensorView {
 		size_t offset = 0
 	);
 	TensorView(
-		TensorView& other_view,
+		const TensorView& other_view,
 		std::vector<size_t> input_shape = {},
 		std::vector<size_t> input_stride = { 1 },
 		size_t offset = 0
 	);
+
+
+	std::vector<double>& get_buffer();
+
 	TensorView deep_copy();
 	double get_val(const std::vector<size_t>& selection);
 	void set_val(const std::vector<size_t>& selection, double val);
