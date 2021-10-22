@@ -1,13 +1,13 @@
 #pragma once
 
 // not used
-#include <complex>
 #include <vector>
 #include <memory>
 #include <map>
 #include <span>
 #include <utility>
 #include <functional>
+#include <pybind11/numpy.h>
 
 
 
@@ -20,22 +20,28 @@ struct TensorStorage {
 struct TensorView {
 
 	TensorView(
+		pybind11::array_t<double> numpy_array
+	);
+	TensorView(
 		std::vector<double> input_data,
 		std::vector<size_t> input_shape = {},
-		std::vector<size_t> input_stride = { 1 },
+		std::vector<size_t> input_stride = {},
 		size_t offset = 0
 	);
 	TensorView(
 		const TensorView& other_view,
 		std::vector<size_t> input_shape = {},
-		std::vector<size_t> input_stride = { 1 },
+		std::vector<size_t> input_stride = {},
 		size_t offset = 0
 	);
+
 
 
 	std::vector<double>& get_buffer();
 
 	TensorView deep_copy();
+	pybind11::array_t<double> to_numpy();
+
 	double get_val(const std::vector<size_t>& selection);
 	void set_val(const std::vector<size_t>& selection, double val);
 
@@ -46,7 +52,6 @@ struct TensorView {
 		std::function<double(double, double)> func
 	);
 
-	void update_traverse();
 	void set_shape_stride(
 		const std::vector<double>& reference_data,
 		std::vector<size_t>& input_shape,
@@ -54,11 +59,19 @@ struct TensorView {
 		size_t offset = 0
 	);
 
+	void squeeze();
+	void unsqueeze();
+
+	std::vector<size_t> do_broadcast(TensorView& other);
+	void undo_broadcast();
+
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
 	std::vector<size_t> m_shape;
 	std::vector<size_t> m_stride;
-	std::vector<size_t> m_traverse_offset;
+
+	std::vector<size_t> m_saved_shape;
+	std::vector<size_t> m_saved_stride;
 };
 }
 

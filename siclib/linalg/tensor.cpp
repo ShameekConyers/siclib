@@ -1,10 +1,46 @@
 #include "tensor.hpp"
-#include <numeric>
-#include <exception>
 #include <iostream>
 
 namespace sic
 {
+TensorView::TensorView(pybind11::array_t<double> numpy_array)
+{
+	pybind11::buffer_info np_arr_info = numpy_array.request();
+	double* data_begin = (double*)np_arr_info.ptr;
+
+	// numpy arrays strides are in bytes rather than type offset
+	// Hence we have to convert them to type offset for interop w/ interators
+
+	//find highest stride and corresponding shape
+	ssize_t highest_stride = -1;
+	ssize_t highest_index = -1;
+	size_t dbl_size = sizeof(double);
+	std::vector<size_t> tmp_shape;
+	std::vector<size_t> tmp_stride;
+	std::vector<std::pair<size_t, size_t>> stride_index_vec;
+
+	for (size_t i = 0; i < np_arr_info.strides.size(); i++) {
+		if (np_arr_info.strides[i] > highest_stride) {
+			highest_stride = np_arr_info.strides[i];
+			highest_index = i;
+		}
+		tmp_shape.push_back(np_arr_info.shape[i]);
+		tmp_stride.push_back(np_arr_info.strides[i] / dbl_size);
+	}
+
+	size_t np_arr_bytes;
+	np_arr_bytes = tmp_stride[highest_index] * np_arr_info.shape[highest_index];
+
+	std::vector<double> data(data_begin, data_begin + np_arr_bytes);
+
+	m_shape = tmp_shape;
+	m_stride = tmp_stride;
+	m_offset = 0;
+	m_storage = std::make_shared<TensorStorage>(TensorStorage{ data });
+
+}
+
+
 TensorView::TensorView(
 	std::vector<double> input_data,
 	std::vector<size_t> input_shape,
@@ -19,10 +55,9 @@ TensorView::TensorView(
 		offset
 	);
 
-
 	m_storage = std::make_shared<TensorStorage>(TensorStorage{ input_data });
-	m_storage->m_data = input_data;
 }
+
 
 TensorView::TensorView(
 	const TensorView& other_view,
@@ -30,6 +65,7 @@ TensorView::TensorView(
 	std::vector<size_t> input_stride,
 	size_t offset)
 {
+
 	const std::vector<double>& input_data = other_view.m_storage->m_data;
 	// sanity checks
 	set_shape_stride(input_data,
@@ -39,8 +75,8 @@ TensorView::TensorView(
 	);
 
 	m_storage = other_view.m_storage;
-	m_storage->m_data = input_data;
 }
+
 
 std::vector<double>& TensorView::get_buffer()
 {
@@ -52,18 +88,39 @@ TensorView TensorView::deep_copy()
 	return TensorView{ m_storage->m_data, m_shape, m_stride };
 }
 
+pybind11::array_t<double> TensorView::to_numpy()
+{
+	auto stride_in_bytes = m_stride;
+	for (auto i = 0; i < m_stride.size(); i++) {
+		stride_in_bytes[i] = stride_in_bytes[i] * sizeof(double);
+	}
+	pybind11::buffer_info result_info(
+		m_storage->m_data.data(),
+		sizeof(double),
+		pybind11::format_descriptor<double>::format(),
+		m_shape.size(),
+		m_shape,
+		stride_in_bytes
+	);
+	pybind11::array_t<double> result(result_info);
+	return result;
+}
+
+
 double TensorView::get_val(const std::vector<size_t>& selection)
 {
 	size_t target_index = 0;
 	size_t shape_size = 0;
 	size_t counter = 0;
-
+	if (selection.size() != m_shape.size()) {
+		throw std::runtime_error("selection not valid.");
+	}
 	for (size_t i = 0; i < selection.size(); i++) {
 		if (selection[i] == 0) {
 			continue;
 		}
-		else if (selection[i] < m_shape.at(counter)) {
-			target_index += selection[i] * m_traverse_offset[counter];
+		else if (selection[i] < m_shape[counter]) {
+			target_index += selection[i] * m_stride[counter];
 			counter++;
 		}
 		else {
@@ -78,15 +135,15 @@ void TensorView::set_val(const std::vector<size_t>& selection, double val)
 	size_t target_index = 0;
 	size_t shape_size = 0;
 	size_t counter = 0;
-	if (selection.size() < m_shape.size()) {
+	if (selection.size() != m_shape.size()) {
 		throw std::runtime_error("selection not valid.");
 	}
 	for (size_t i = 0; i < selection.size(); i++) {
 		if (selection[i] == 0) {
 			continue;
 		}
-		else if (selection[i] < m_shape.at(counter)) {
-			target_index += selection[i] * m_traverse_offset[counter];
+		else if (selection[i] < m_shape[counter]) {
+			target_index += selection[i] * m_stride[counter];
 			counter++;
 		}
 		else {
@@ -95,7 +152,6 @@ void TensorView::set_val(const std::vector<size_t>& selection, double val)
 	}
 	m_storage->m_data[target_index] = val;
 }
-
 
 TensorView TensorView::operator+ (TensorView& other)
 {
@@ -111,35 +167,12 @@ TensorView TensorView::binary_element_wise_op(TensorView& other, std::function<d
 	std::vector<size_t> this_shape = m_shape;
 	std::vector<size_t> other_shape = other.m_shape;
 	size_t res_size = std::max(this_shape.size(), other_shape.size());
-	std::vector<size_t> res_shape(res_size);
 	std::vector<double> res_data;
 
-
-	if (this_shape.size() != other_shape.size()) {
-		std::vector<size_t> tmp;
-		if (this_shape.size() < other_shape.size()) {
-			tmp.resize(res_size - this_shape.size(), 1);
-			tmp.insert(tmp.end(), this_shape.begin(), this_shape.end());
-			this_shape = std::move(tmp);
-		}
-		else {
-			tmp.resize(res_size - other_shape.size(), 1);
-			tmp.insert(tmp.end(), other_shape.begin(), other_shape.end());
-			other_shape = std::move(tmp);
-		}
+	std::vector<size_t> res_shape = do_broadcast(other);
+	for (auto item : res_shape) {
+		cumulative_prod *= item;
 	}
-
-	for (size_t i = 0; i < res_size; i++) {
-		size_t l = this_shape[i];
-		size_t r = other_shape[i];
-
-		if (l != r && (l != 1 && r != 1)) {
-			throw std::runtime_error("incompatible shapes");
-		}
-		res_shape[i] = std::max(r, l);
-		cumulative_prod *= res_shape[i];
-	}
-
 	res_data.resize(cumulative_prod);
 	TensorView res_tensor{ res_data, res_shape };
 	if (res_data.size() == 0) {
@@ -191,22 +224,65 @@ TensorView TensorView::binary_element_wise_op(TensorView& other, std::function<d
 			}
 		}
 	}
+
+	undo_broadcast();
+	other.undo_broadcast();
 	return res_tensor;
 }
 
-void TensorView::update_traverse()
+
+std::vector<size_t> TensorView::do_broadcast(TensorView& other)
 {
+	m_saved_shape = m_shape;
+	m_saved_stride = m_stride;
 
-	m_traverse_offset.resize(m_shape.size());
 
-	for (ssize_t i = m_traverse_offset.size() - 1; i >= 0; i--) {
+	std::vector<size_t> other_shape = std::move(other.m_shape);
+	size_t res_size = std::max(m_shape.size(), other_shape.size());
+	std::vector<size_t> res_shape(res_size);
 
-		if (i != m_traverse_offset.size() - 1) {
-			m_traverse_offset[i] = m_traverse_offset[i + 1] * m_stride[i];
+	if (m_shape.size() != other_shape.size()) {
+		std::vector<size_t> tmp_shape;
+		std::vector<size_t> tmp_stride;
+		if (m_shape.size() < other_shape.size()) {
+			tmp_shape.resize(res_size - m_shape.size(), 1);
+			tmp_shape.resize(res_size - m_shape.size(), m_stride[0]);
+			tmp_stride.insert(
+				tmp_shape.end(), other.m_stride.begin(), other.m_stride.end());
+			m_shape = std::move(tmp_shape);
 		}
 		else {
-			m_traverse_offset[i] = m_stride[i] * 1;
+			tmp_shape.resize(res_size - other_shape.size(), 1);
+			tmp_stride.resize(res_size - m_shape.size(), other.m_stride[0]);
+			tmp_shape.insert(
+				tmp_shape.end(), other_shape.begin(), other_shape.end());
+			tmp_stride.insert(
+				tmp_shape.end(), m_stride.begin(), m_stride.end());
+			other.m_shape = std::move(tmp_shape);
 		}
+	}
+
+	for (size_t i = 0; i < res_size; i++) {
+		size_t l = m_shape[i];
+		size_t r = other_shape[i];
+
+		if (l != r && (l != 1 && r != 1)) {
+			throw std::runtime_error("incompatible shapes");
+		}
+		res_shape[i] = std::max(r, l);
+	}
+
+	return res_shape;
+}
+
+void TensorView::undo_broadcast()
+{
+	if (m_saved_shape.size() != 0) {
+		m_shape = m_saved_shape;
+		m_stride = m_saved_stride;
+
+		m_saved_stride.clear();
+		m_saved_shape.clear();
 	}
 }
 
@@ -227,30 +303,29 @@ void TensorView::set_shape_stride(const std::vector<double>& input_data,
 	if (input_stride.size() > input_shape.size()) {
 		throw std::runtime_error("invalid stride e1");
 	}
-	input_stride.resize(input_shape.size(), 1);
+
+
+	input_stride.resize(input_shape.size());
+
 	size_t shape_prod = 1;
 	for (size_t i = 0; i < input_stride.size(); i++) {
-		if (input_stride[i] > input_shape[i]) {
 
-			throw std::runtime_error("invalid stride e2");
+		shape_prod *= input_shape[i] * input_stride[i];
+		size_t prev = 1;
+		if (i == 0) {
+			prev = input_stride[i - 1] * input_shape[i - 1];
 		}
-		if (input_shape[i] % input_stride[i] != 0) {
-			throw std::runtime_error("invalid stride e3");
-		}
-		shape_prod = input_shape[i] * input_stride[i];
+		input_stride[i] = input_stride[i]
+			* prev;
 	}
 
 	if (shape_prod > ref_size) {
-		throw std::runtime_error("invalid shape");
-	}
-	if (shape_prod == 0) {
 		throw std::runtime_error("invalid shape");
 	}
 
 	m_stride = input_stride;
 	m_shape = input_shape;
 	m_offset = offset;
-	update_traverse();
 }
 
 
