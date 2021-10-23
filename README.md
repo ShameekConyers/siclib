@@ -27,7 +27,10 @@ just pip.
 ## Current Modules
 
 ### Numerical
-A Collection of various Numerical approximation methods, uses numpy currently
+A collection of various Numerical approximation methods
 
 ### Linalg
 A collection of various Linear Algebra operations and structures
+
+### Stats
+A collection of various procedures from statistics

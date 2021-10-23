@@ -9,22 +9,24 @@ namespace py = pybind11;
 PYBIND11_MODULE(_pysiclib, m)
 {
 	// numerical
-	py::module_ m_num = m.def_submodule("numerical");
-	m_num.def(
+	py::module_ m_numeric = m.def_submodule("numerical");
+	m_numeric.def(
 		"derivative_at_index", &derivative_at_index);
-	m_num.def(
+	m_numeric.def(
 		"derivative_at_value", &derivative_at_value);
-	m_num.def(
+	m_numeric.def(
 		"integral_index_interval", &integral_index_interval);
-	m_num.def(
+	m_numeric.def(
 		"equation_solution", &equation_solution
 	);
-	m_num.def(
+	m_numeric.def(
 		"initial_value_problem", &initial_value_problem
 	);
 
 	// linalg
 	py::module_ m_linalg = m.def_submodule("linalg");
+
+
 	py::class_<sic::TensorView>(m_linalg, "Tensor")
 		.def(py::init <
 			py::array_t<double>>(),
@@ -41,14 +43,8 @@ PYBIND11_MODULE(_pysiclib, m)
 			py::arg("offset") = 0
 		)
 		.def(py::init <
-			sic::TensorView&,
-			std::vector<size_t>,
-			std::vector<size_t>,
-			size_t>(),
-			py::arg("other_view"),
-			py::arg("input_shape") = std::vector<size_t>{},
-			py::arg("input_stride") = std::vector<size_t>{},
-			py::arg("offset") = 0
+			sic::TensorView&>(),
+			py::arg("other_view")
 		)
 		.def(
 			"binary_element_wise_op",
@@ -71,6 +67,49 @@ PYBIND11_MODULE(_pysiclib, m)
 			"to_numpy",
 			&sic::TensorView::to_numpy
 		)
-		;
+		.def(
+			"transpose",
+			&sic::TensorView::transpose
+		)
+		.def(
+			"fold_op",
+			&sic::TensorView::fold_op
+		)
+		.def(
+			"deep_copy",
+			&sic::TensorView::deep_copy
+		)
+		.def(
+			"__repr__",
+			[](const sic::TensorView& tv)
+			{
+				std::stringstream output;
+				output << tv;
+				return output.str();
+			}
+	);
+
+
+
+	// stats
+	py::module_ stats = m.def_submodule("stats");
+
+	stats.def(
+		"find_moment",
+		&sic::find_moment);
+	stats.def(
+		"find_mean",
+		&sic::find_mean);
+	stats.def(
+		"find_variance",
+		&sic::find_variance);
+	stats.def(
+		"find_skew",
+		&sic::find_skew);
+	stats.def(
+		"find_kurtosis",
+		&sic::find_kurtosis);
+
+
 
 }

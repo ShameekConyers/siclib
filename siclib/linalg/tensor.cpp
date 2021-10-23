@@ -140,32 +140,6 @@ TensorView::TensorView(
 }
 
 
-TensorView::TensorView(
-	const TensorView& other_view,
-	std::vector<size_t> input_shape,
-	std::vector<size_t> input_stride,
-	size_t offset)
-{
-
-	const std::vector<double>& input_data = other_view.m_storage->m_data;
-	// sanity checks
-	std::vector<size_t> emp;
-	if (input_shape != emp && input_stride != emp) {
-		set_shape_stride(input_data,
-			input_shape,
-			input_stride,
-			offset
-		);
-	}
-	else {
-		m_shape = other_view.m_shape;
-		m_stride = other_view.m_stride;
-		m_offset = 0;
-	}
-	m_storage = other_view.m_storage;
-}
-
-
 std::vector<double>& TensorView::get_buffer()
 {
 	return m_storage->m_data;
@@ -500,6 +474,16 @@ void TensorView::set_shape_stride(const std::vector<double>& input_data,
 	m_stride = input_stride;
 	m_shape = input_shape;
 	m_offset = offset;
+}
+
+TensorView TensorView::transpose()
+{
+	std::vector<size_t> result_shape = m_shape;
+	std::vector<size_t> result_stride = m_stride;
+	std::reverse(result_shape.begin(), result_shape.end());
+	std::reverse(result_stride.begin(), result_stride.end());
+
+	return TensorView{ *this };
 }
 
 

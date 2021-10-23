@@ -34,13 +34,26 @@ public:
 		size_t offset = 0
 	);
 	TensorView(
-		const TensorView& other_view,
-		std::vector<size_t> input_shape = {},
-		std::vector<size_t> input_stride = {},
-		size_t offset = 0
-	);
+		const TensorView& other_view
+	)
+	{
+		m_shape = other_view.m_shape;
+		m_stride = other_view.m_stride;
+		m_offset = other_view.m_offset;
+		m_storage = other_view.m_storage;
+	};
 
+	TensorView& operator=(const TensorView& other_view)
+	{
+		m_shape = other_view.m_shape;
+		m_stride = other_view.m_stride;
+		m_offset = other_view.m_offset;
+		m_storage = other_view.m_storage;
+		return *this;
+	}
 
+	// TensorView(TensorView&& other) = default;
+	// TensorView& operator=(TensorView&& other) = default;
 
 	std::vector<double>& get_buffer();
 
@@ -67,7 +80,7 @@ public:
 	);
 
 	TensorView fold_op(
-		std::function<double(double, double)> function_vector,
+		std::function<double(double, double)> binary_op,
 		double inital_value,
 		size_t target_dim,
 		bool left_op = true
@@ -82,7 +95,7 @@ public:
 
 	void squeeze();
 	void unsqueeze();
-	void transpose();
+	TensorView transpose();
 
 	std::vector<size_t> do_broadcast(TensorView& other);
 	void undo_broadcast();
@@ -95,8 +108,9 @@ public:
 
 	//utils
 	friend std::ostream& operator<<(std::ostream& output, const TensorView& view);
+	void show_state();
 
-private:
+// private:
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
 	mutable std::vector<size_t> m_shape;

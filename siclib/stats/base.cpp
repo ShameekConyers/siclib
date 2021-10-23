@@ -1,6 +1,7 @@
 #include "base.hpp"
 #include <exception>
 #include <functional>
+#include <iostream>
 
 namespace sic
 {
@@ -53,7 +54,9 @@ TensorView find_moment(
 	{
 		return rhs + lhs;
 	};
+
 	result = result.fold_op(accumulate, 0, dim);
+
 	return result;
 }
 
