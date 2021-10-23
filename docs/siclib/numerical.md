@@ -1,16 +1,16 @@
 ---
-nav_name: Numerical
+nav_name: Numerical Analysis
 name: "numerical"
-title:  Numerical
+title:  siclib.numerical
 date_added:
 date_edited:
 description:
 ---
 
-## Numerical Analysis and it's Applications
+## A module based on Numerical Analysis
 
 This project is a collection of various Numerical Analysis techniques that
-I have made coded in C++ and made available as a Python package.
+I coded in C++ and made available as a Python package.
 
 ## Source Code
 
@@ -64,6 +64,7 @@ than using symbolic manipulation to find exact solutions to solve math problems
 - #### Example 2
   Suppose we manage a store where sales can be explained by the
 	number of dollars spent on local advertising, we can then write
+
 	$$
 	Sales = f(Advertising)
 	$$

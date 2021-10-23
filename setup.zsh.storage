@@ -10,3 +10,6 @@ export CPPFLAGS="-I/opt/homebrew/opt/lapack/include"
 -I /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers
 
 clang++ -std=c++20 siclinalg/_main.cpp -framework Accelerate -I /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers -o demo.out   && ./demo.out -
+
+
+clang++ -O3 -std=c++20 -shared -fPIC src/agentlib/agentlib_env.cpp -o src/agentlib/agentlib_env.so $(python3 -m pybind11 --includes) -arch x86_64 -undefined dynamic_lookup

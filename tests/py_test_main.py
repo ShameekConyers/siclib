@@ -1,6 +1,7 @@
 import numpy as np
 import numpy
 from pysiclib import numerical as snum
+import pysiclib
 
 arr = np.array([])
 for k in range(0, 101):
@@ -40,7 +41,7 @@ def system_of_eqs(t, var_arr):
 	dvar_arr[1] = 0.6 * dvar_arr[0] - 0.2 * var_arr[1]
 	return dvar_arr
 
-initial_conditions = np.array([0.0, 0.0])
+initial_conditions = pysiclib.linalg.Tensor(np.array([0.0, 0.0]))
 
 val = snum.initial_value_problem(
 		system_of_eqs, initial_conditions, 0.5, 0.0)

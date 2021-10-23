@@ -13,12 +13,17 @@
 
 namespace sic
 {
+
 struct TensorStorage {
 	std::vector<double> m_data;
 };
 
-struct TensorView {
+class TensorObj {
 
+};
+
+class TensorView : public TensorObj {
+public:
 	TensorView(
 		pybind11::array_t<double> numpy_array
 	);
@@ -42,14 +47,30 @@ struct TensorView {
 	TensorView deep_copy();
 	pybind11::array_t<double> to_numpy();
 
-	double get_val(const std::vector<size_t>& selection);
+	double get_val(const std::vector<size_t>& selection) const;
 	void set_val(const std::vector<size_t>& selection, double val);
+
 
 	double& operator[] (size_t element);
 	TensorView operator+ (TensorView& other);
+	TensorView operator- (TensorView& other);
+
 
 	TensorView binary_element_wise_op(TensorView& other,
 		std::function<double(double, double)> func
+	);
+
+	TensorView apply_op(
+		std::vector<std::function<double(double, double)>> function_vector,
+		size_t target_dim,
+		double other
+	);
+
+	TensorView fold_op(
+		std::function<double(double, double)> function_vector,
+		double inital_value,
+		size_t target_dim,
+		bool left_op = true
 	);
 
 	void set_shape_stride(
@@ -61,18 +82,33 @@ struct TensorView {
 
 	void squeeze();
 	void unsqueeze();
+	void transpose();
 
 	std::vector<size_t> do_broadcast(TensorView& other);
 	void undo_broadcast();
 
+
+	// getters
+	std::vector<size_t> get_shape();
+	std::vector<size_t> get_stride();
+	size_t get_offset();
+
+	//utils
+	friend std::ostream& operator<<(std::ostream& output, const TensorView& view);
+
+private:
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
-	std::vector<size_t> m_shape;
-	std::vector<size_t> m_stride;
+	mutable std::vector<size_t> m_shape;
+	mutable std::vector<size_t> m_stride;
 
-	std::vector<size_t> m_saved_shape;
-	std::vector<size_t> m_saved_stride;
+	mutable std::vector<size_t> m_saved_shape;
+	mutable std::vector<size_t> m_saved_stride;
 };
+
+
+TensorView generate_tensor(std::vector<size_t> shape, double inital_value);
+
 }
 
 

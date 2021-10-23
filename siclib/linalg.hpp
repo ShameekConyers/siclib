@@ -1,3 +1,4 @@
 #pragma once
 
-#include "./linalg/tensor.hpp"
+#include "./linalg/Tensor.hpp"
+#include "./linalg/TensorTransform.hpp"

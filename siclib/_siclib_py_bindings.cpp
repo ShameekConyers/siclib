@@ -1,8 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-#include "numerical.hpp"
-#include "linalg.hpp"
+#include "siclib.hpp"
 #include <pybind11/numpy.h>
 
 namespace py = pybind11;
@@ -59,12 +58,19 @@ PYBIND11_MODULE(_pysiclib, m)
 			"get_buffer",
 			&sic::TensorView::get_buffer
 		)
-		.def_readonly(
-			"m_shape", &sic::TensorView::m_shape)
-		.def_readonly(
-			"m_stride", &sic::TensorView::m_stride)
-		.def_readonly(
-			"m_offset", &sic::TensorView::m_offset)
+		.def(
+			"get_shape", &sic::TensorView::get_shape
+		)
+		.def(
+			"get_stride", &sic::TensorView::get_stride
+		)
+		.def(
+			"get_offset", &sic::TensorView::get_offset
+		)
+		.def(
+			"to_numpy",
+			&sic::TensorView::to_numpy
+		)
 		;
 
 }
