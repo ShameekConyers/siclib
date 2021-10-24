@@ -11,6 +11,7 @@ TensorView find_moment(TensorView& target, size_t dim, size_t moment,
 
 TensorView find_mean(TensorView& target, size_t dim);
 TensorView find_variance(TensorView& target, size_t dim);
+TensorView find_stddev(TensorView& target, size_t dim);
 TensorView find_skew(TensorView& target, size_t dim);
 TensorView find_kurtosis(TensorView& target, size_t dim);
 

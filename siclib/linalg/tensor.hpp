@@ -68,7 +68,9 @@ public:
 	TensorView operator+ (TensorView& other);
 	TensorView operator- (TensorView& other);
 
-
+	TensorView unitary_op(
+		std::function<double(double)> func
+	);
 	TensorView binary_element_wise_op(TensorView& other,
 		std::function<double(double, double)> func
 	);

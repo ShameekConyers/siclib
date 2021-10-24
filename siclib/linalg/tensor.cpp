@@ -8,8 +8,9 @@ template <typename T>
 std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
 {
 	output << "[";
-	for (auto const& value : values) {
-		output << value << ", ";
+	for (size_t i = 0; i < values.size(); i++) {
+		output << values[i];
+		if (i != values.size() - 1) output << ", ";
 	}
 	output << "]\n";
 	return output;
@@ -220,6 +221,51 @@ void TensorView::set_val(const std::vector<size_t>& selection, double val)
 TensorView TensorView::operator- (TensorView& other)
 {
 	return binary_element_wise_op(other, std::minus());
+}
+
+TensorView TensorView::unitary_op(
+	std::function<double(double)> unitary_op)
+{
+	int c_idx = 0;
+	int counter = 1;
+
+	std::vector<size_t> this_shape = m_shape;
+
+
+	std::vector<size_t> cur_this(this_shape.size());
+	TensorView result_tensor = deep_copy();
+
+	bool flag = true;
+	ssize_t lst_sig = this_shape.size() - 1;
+	while (flag) {
+		//! Insert unitary op here
+		double result = unitary_op(get_val(cur_this));
+		result_tensor.set_val(cur_this, result);
+
+		cur_this[lst_sig]++;
+		if (cur_this[lst_sig] == this_shape[lst_sig]) {
+			c_idx = lst_sig;
+			while (flag) {
+				if (c_idx == -1) {
+					flag = false;
+					break;
+				}
+				if (cur_this[c_idx] == this_shape[c_idx]) {
+					cur_this[c_idx] = 0;
+					c_idx--;
+				}
+				else {
+					cur_this[c_idx] += 1;
+					if (cur_this[c_idx] < this_shape[c_idx]) {
+						break;
+					}
+					else {
+						continue;
+					}
+				}
+			}
+		}
+	}
 }
 
 TensorView TensorView::operator+ (TensorView& other)
@@ -482,8 +528,10 @@ TensorView TensorView::transpose()
 	std::vector<size_t> result_stride = m_stride;
 	std::reverse(result_shape.begin(), result_shape.end());
 	std::reverse(result_stride.begin(), result_stride.end());
-
-	return TensorView{ *this };
+	TensorView result{ *this };
+	result.m_shape = result_shape;
+	result.m_stride = result_stride;
+	return result;
 }
 
 

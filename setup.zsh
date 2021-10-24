@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-if true
+if false
 then
 	rm -r build
 	# rm -r pysiclib/**/*.pyi

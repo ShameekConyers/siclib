@@ -7,14 +7,14 @@ date_edited:
 description:
 ---
 
-## A module based on Numerical Analysis
+## A Module based on Numerical Analysis
 
 This project is a collection of various Numerical Analysis techniques that
 I coded in C++ and made available as a Python package.
 
 ## Source Code
 
-Source Code is available <a href=https://github.com/ShameekConyers/sicnumerical/tree/main>here</a>.
+Source Code is available <a href=https://github.com/ShameekConyers/siclib>here</a>.
 
 ## Package Documentation
 
@@ -80,8 +80,9 @@ than using symbolic manipulation to find exact solutions to solve math problems
 	solve for this explicitly and would have to use a numerical approximation
 	technique.
 
+---
+## Documentation
 
-## Implemented Techniques
 - ### Solutions of Single Variable Equations
   Approximate $x$ such that $f(x) = y, \enspace x, y \in \R$
 
@@ -112,8 +113,6 @@ than using symbolic manipulation to find exact solutions to solve math problems
 	>>> snum.equation_solution(no_solution_example, target_y)
 	None
 	```
-
-
 
 
 - ### Differentiation

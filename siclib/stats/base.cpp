@@ -70,6 +70,17 @@ TensorView find_variance(TensorView& target, size_t dim)
 	return find_moment(target, dim, 2, true);
 }
 
+TensorView find_stddev(TensorView& target, size_t dim)
+{
+	TensorView var_tensor = find_variance(target, dim);
+	std::function<double(double)> proc = [](double lhs)
+	{
+		return powl(lhs, 0.5);
+	};
+
+	return var_tensor.unitary_op(proc);
+}
+
 TensorView find_skew(TensorView& target, size_t dim)
 {
 	return find_moment(target, dim, 3, true, true);

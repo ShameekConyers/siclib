@@ -47,6 +47,10 @@ PYBIND11_MODULE(_pysiclib, m)
 			py::arg("other_view")
 		)
 		.def(
+			"unitary_op",
+			&sic::TensorView::unitary_op
+		)
+		.def(
 			"binary_element_wise_op",
 			&sic::TensorView::binary_element_wise_op
 		)
@@ -104,12 +108,14 @@ PYBIND11_MODULE(_pysiclib, m)
 		"find_variance",
 		&sic::find_variance);
 	stats.def(
+		"find_stddev",
+		&sic::find_stddev);
+	stats.def(
 		"find_skew",
 		&sic::find_skew);
 	stats.def(
 		"find_kurtosis",
 		&sic::find_kurtosis);
-
 
 
 }
