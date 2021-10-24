@@ -1,6 +1,8 @@
 # siclib
 
-A library of various things - with a focus on math.
+A C++ library of various things - with a focus on math.
+
+pysiclib is the python interface.
 
 ## Corresponding Project and Documentation
 Can be found here <a href ="https://shameekconyers.com/projects/siclib">here</a>

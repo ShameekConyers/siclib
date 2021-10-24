@@ -266,6 +266,7 @@ TensorView TensorView::unitary_op(
 			}
 		}
 	}
+	return result_tensor;
 }
 
 TensorView TensorView::operator+ (TensorView& other)

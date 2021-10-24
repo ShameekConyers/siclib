@@ -91,9 +91,9 @@ TensorView find_kurtosis(TensorView& target, size_t dim)
 	return find_moment(target, dim, 4, true, true);
 }
 
-TensorView find_covariance(TensorView& target, size_t dim)
-{
+// TensorView find_covariance(TensorView& target, size_t dim)
+// {
 
-}
+// }
 
 }
