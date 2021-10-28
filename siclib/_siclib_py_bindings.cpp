@@ -11,16 +11,14 @@ PYBIND11_MODULE(_pysiclib, m)
 	// numerical
 	py::module_ m_numeric = m.def_submodule("numerical");
 	m_numeric.def(
-		"derivative_at_index", &derivative_at_index);
+		"derivative_at_index", &sic::derivative_at_index);
 	m_numeric.def(
-		"derivative_at_value", &derivative_at_value);
+		"integral_index_interval", &sic::integral_index_interval);
 	m_numeric.def(
-		"integral_index_interval", &integral_index_interval);
-	m_numeric.def(
-		"equation_solution", &equation_solution
+		"equation_solution", &sic::equation_solution
 	);
 	m_numeric.def(
-		"initial_value_problem", &initial_value_problem
+		"initial_value_problem", &sic::initial_value_problem
 	);
 
 	// linalg
@@ -73,7 +71,9 @@ PYBIND11_MODULE(_pysiclib, m)
 		)
 		.def(
 			"transpose",
-			&sic::TensorView::transpose
+			&sic::TensorView::transpose,
+			py::arg("dim_1") = ssize_t(-1),
+			py::arg("dim_2") = ssize_t(-1)
 		)
 		.def(
 			"fold_op",
@@ -82,6 +82,35 @@ PYBIND11_MODULE(_pysiclib, m)
 		.def(
 			"deep_copy",
 			&sic::TensorView::deep_copy
+		)
+		.def(
+			"squeeze",
+			&sic::TensorView::squeeze,
+			py::arg("target_dim") = ssize_t(-1)
+		)
+		.def(
+			"unsqueeze",
+			&sic::TensorView::unsqueeze
+		)
+		.def(
+			"matmul",
+			&sic::TensorView::matmul
+		)
+		.def(
+			"slice_view",
+			&sic::TensorView::slice_view
+		)
+		.def(
+			"view_buffer",
+			&sic::TensorView::view_buffer
+		)
+		.def(
+			"get_item",
+			&sic::TensorView::get_item
+		)
+		.def(
+			"dotprod",
+			&sic::TensorView::dotprod
 		)
 		.def(
 			"__repr__",
@@ -117,5 +146,48 @@ PYBIND11_MODULE(_pysiclib, m)
 		"find_kurtosis",
 		&sic::find_kurtosis);
 
+	stats.def(
+		"rand_normal_tensor",
+		&sic::rand_normal_tensor);
+
+	stats.def(
+		"rand_normal_tensor",
+		&sic::rand_uniform_tensor);
+
+	// adaptive
+	py::module_ adaptive = m.def_submodule("adaptive");
+
+	py::class_<sic::ProtoNet>(adaptive, "ProtoNet")
+		.def(py::init <
+			size_t,
+			size_t,
+			size_t,
+			size_t,
+			double>())
+		.def(
+			"run_epoch",
+			&sic::ProtoNet::run_epoch
+		)
+		.def(
+			"query_net",
+			&sic::ProtoNet::query_net
+		)
+		.def_readonly(
+			"m_weights",
+			&sic::ProtoNet::m_weights
+		)
+		.def_readonly(
+			"m_bias",
+			&sic::ProtoNet::m_bias
+		)
+		.def_readonly(
+			"m_transform",
+			&sic::ProtoNet::m_transform
+		)
+		.def_readonly(
+			"m_transform_deriv",
+			&sic::ProtoNet::m_transform_deriv
+		)
+		;
 
 }

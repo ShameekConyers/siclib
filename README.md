@@ -36,3 +36,7 @@ A collection of various Linear Algebra operations and structures
 
 ### Stats
 A collection of various procedures from statistics
+
+### Adaptive (name pending)
+
+A collection of adaptive learning methods.

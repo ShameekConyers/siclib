@@ -27,12 +27,14 @@ public:
 	TensorView(
 		pybind11::array_t<double> numpy_array
 	);
+
 	TensorView(
 		std::vector<double> input_data,
 		std::vector<size_t> input_shape = {},
 		std::vector<size_t> input_stride = {},
 		size_t offset = 0
 	);
+
 	TensorView(
 		const TensorView& other_view
 	)
@@ -40,6 +42,19 @@ public:
 		m_shape = other_view.m_shape;
 		m_stride = other_view.m_stride;
 		m_offset = other_view.m_offset;
+		m_storage = other_view.m_storage;
+	};
+
+	TensorView(
+		const TensorView& other_view,
+		std::vector<size_t> input_shape,
+		std::vector<size_t> input_stride,
+		size_t offset
+	)
+	{
+		m_shape = input_shape;
+		m_stride = input_stride;
+		m_offset = offset;
 		m_storage = other_view.m_storage;
 	};
 
@@ -54,12 +69,13 @@ public:
 
 	// TensorView(TensorView&& other) = default;
 	// TensorView& operator=(TensorView&& other) = default;
-
+	const	std::vector<double>& view_buffer() const;
 	std::vector<double>& get_buffer();
 
-	TensorView deep_copy();
+	TensorView deep_copy() const;
 	pybind11::array_t<double> to_numpy();
 
+	TensorView slice_view(const std::vector<ssize_t>& selection) const;
 	double get_val(const std::vector<size_t>& selection) const;
 	void set_val(const std::vector<size_t>& selection, double val);
 
@@ -69,24 +85,30 @@ public:
 	TensorView operator- (TensorView& other);
 
 	TensorView unitary_op(
-		std::function<double(double)> func
+		const std::function<double(double)>& func
 	);
-	TensorView binary_element_wise_op(TensorView& other,
-		std::function<double(double, double)> func
-	);
-
-	TensorView apply_op(
-		std::vector<std::function<double(double, double)>> function_vector,
-		size_t target_dim,
-		double other
-	);
+	TensorView binary_element_wise_op(const TensorView& other,
+		const std::function<double(double, double)>& func
+	) const;
 
 	TensorView fold_op(
-		std::function<double(double, double)> binary_op,
+		const std::function<double(double, double)>& binary_op,
 		double inital_value,
 		size_t target_dim,
 		bool left_op = true
 	);
+
+	TensorView transpose(ssize_t dim_1 = -1, ssize_t dim_2 = -1);
+
+	// matrix methods
+	TensorView matmul(const TensorView& other) const;
+	TensorView mat_inv() const; // TODO
+
+	// see numpy dot
+	TensorView dotprod(const TensorView& other) const; // TODO
+
+	TensorView squeeze(ssize_t target_dim = -1) const;
+	TensorView unsqueeze(size_t target_dim) const;
 
 	void set_shape_stride(
 		const std::vector<double>& reference_data,
@@ -95,96 +117,33 @@ public:
 		size_t offset = 0
 	);
 
-	void squeeze();
-	void unsqueeze();
-	TensorView transpose();
+	//
+	std::tuple<std::vector<size_t>, TensorView, TensorView> do_broadcast(
+		const TensorView& other) const;
 
-	std::vector<size_t> do_broadcast(TensorView& other);
-	void undo_broadcast();
-
+	TensorView do_alignment() const; // TODO
 
 	// getters
-	std::vector<size_t> get_shape();
-	std::vector<size_t> get_stride();
-	size_t get_offset();
+	std::vector<size_t> get_shape() const;
+	std::vector<size_t> get_stride() const;
+	size_t get_offset() const;
+	double get_item() const;
 
 	//utils
 	friend std::ostream& operator<<(std::ostream& output, const TensorView& view);
-	void show_state();
+	bool is_matrix() const;
+	bool is_vector() const;
+	bool is_aligned() const; // TODO
 
-// private:
+// protected:
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
 	mutable std::vector<size_t> m_shape;
 	mutable std::vector<size_t> m_stride;
 
-	mutable std::vector<size_t> m_saved_shape;
-	mutable std::vector<size_t> m_saved_stride;
 };
 
 
 TensorView generate_tensor(std::vector<size_t> shape, double inital_value);
 
 }
-
-
-// namespace end
-// {
-// 	//using storage = std::span<DataArray>
-
-// 	template<typename T>
-// 	struct DataArray {
-// 		T* array;
-// 		size_t capacity;
-// 		size_t current;
-// 	};
-
-// 	template<typename T, size_t K = 0>
-// 	struct Tensor {
-
-// 		DataArray& data();
-// 		Tensor<T, K> deep_copy();
-// 		void align();
-// 		bool is_aligned();
-// 		Tensor<T, K> to_numpy();
-// 		Tensor<T, K> to_numpy_transpose();
-// 		void to_pytorch();
-// 		void to_tensorflow();
-// 		void from_pytorch() :
-// 			void from_tensorflow();
-// 		int save();
-// 		void broadcasting();
-// 		void permute_shape();
-// 		void align_named_shape();
-// 		bool is_aligned_name_shape();
-
-// 		std::span<DataArray> data;
-// 		size_t offset;
-// 		std::vector<size_t> shape;
-// 		std::map<std::string, size_t*> named_shape;
-// 		std::vector<size_t> stride;
-// 		std::vector<size_t> history;
-// 		std::vector<std::function<T()>> grad;
-// 	};
-
-// 	struct TensorStorage {
-// 		std::vector<float> storage;
-// 	};
-
-// 	class TensorView {
-
-// 		TensorView getCopy();
-// 		TensorView getDeepCopy();
-// 		void doAlign();
-// 		bool isAligned();
-// 		void saveData();
-// 		void loadData();
-
-// 		std::shared_ptr<TensorStorage> m_data;
-// 		int offset;
-// 		std::vector<int> shape;
-// 		std::vector<int> stride;
-// 	};
-
-
-// }

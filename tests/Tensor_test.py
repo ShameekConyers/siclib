@@ -21,7 +21,7 @@ print(l.strides)
 l = np.array([[[1, 2], [4, 5]], [[10, 2], [4, 5]]])
 r = pysiclib.linalg.Tensor(l)
 print(l.strides)
-print(r.m_stride)
+print(r.get_stride())
 print(r.get_buffer()[0])
 print(r.get_buffer()[4])
 

@@ -8,7 +8,7 @@ description:
 ---
 
 ## A Scientific Computation Library
-SicLib is a collection of various things I have Implemented in C++ , with a focus being on math. pysiclib is the package inferface that allows
+SicLib is a collection of various things I have Implemented in C++ , with a focus being on math. pysiclib is the package interface that allows
 use through Python.
 
 ## Navigation
@@ -17,7 +17,19 @@ The various modules can be navigated to the left
 ## Source Code & Installation
 Source code can be found <a href=https://github.com/ShameekConyers/siclib> here </a>
 
+
+## Implementation Notes
+
+The Tensor is the general data structure of this Library. However, they are fairly unoptimized as they are implemented with using generalizations, functional programming and using Data Views. I recommend PyTorch or TorchLib instead for a
+general Tensor Library.
+
+# Justification of Implementation
+The general idea work with pure functions and views to allow refactoring into
+optimized Implementation later - this (hopefully) will allow operations which are "safe" to be parallelizable sent to the GPU or through BLAS routines
 ---
+<!-- ## Example Project
+
+An Example utilization can be found <a href=https://github.com/ShameekConyers/siclib> here </a> -->
 
 ## Example Functionality
 
