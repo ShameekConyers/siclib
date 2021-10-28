@@ -1,6 +1,6 @@
 ---
 nav_name: Linear Algebra
-name: "numerical"
+name: "linalg"
 title:  siclib.linalg
 date_added:
 date_edited:
@@ -11,8 +11,7 @@ description:
 
 ## Implementation Notes
 
-Tensors are unoptimized as they are implemented with functional programming in
-mind to stay closer to Theory. I recommend PyTorch or TorchLib instead for a
+Tensor operations are unoptimized. I recommend PyTorch or TorchLib instead for a
 general Tensor Library.
 
 ---

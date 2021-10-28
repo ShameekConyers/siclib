@@ -1,4 +1,4 @@
-#include "base.hpp"
+#include "descriptive.hpp"
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -91,9 +91,51 @@ TensorView find_kurtosis(TensorView& target, size_t dim)
 	return find_moment(target, dim, 4, true, true);
 }
 
-// TensorView find_covariance(TensorView& target, size_t dim)
-// {
 
-// }
+TensorView rand_normal_tensor(double mean,
+	double stddev,
+	std::vector<size_t> shape)
+{
+	std::normal_distribution<double> distr{ mean, stddev };
+
+	std::vector<double> result_data;
+	size_t cumul_prod = 1;
+	for (auto item : shape) {
+		cumul_prod *= item;
+	}
+
+	result_data.reserve(cumul_prod);
+	for (size_t i = 0; i < cumul_prod; i++) {
+		result_data.push_back(distr(siclib_rng));
+		std::cerr << i << "...";
+	}
+
+	return TensorView{ result_data, shape };
+}
+
+
+TensorView rand_uniform_tensor(double left,
+	double right,
+	std::vector<size_t> shape)
+{
+
+	std::uniform_real_distribution<double> distr{ left, right };
+
+	std::vector<double> result_data;
+	size_t cumul_prod = 1;
+	for (auto item : shape) {
+		cumul_prod *= item;
+	}
+
+	result_data.reserve(cumul_prod);
+	for (size_t i = 0; i < cumul_prod; i++) {
+		result_data.push_back(distr(siclib_rng));
+	}
+	// std::cerr << cumul_prod;
+	// std::cerr << "[" << shape[0] << ", " << shape[1] << "]" << "\n";
+
+	return TensorView{ result_data, shape };
+}
+
 
 }

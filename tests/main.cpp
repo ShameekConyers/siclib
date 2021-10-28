@@ -1,6 +1,7 @@
 #include "../siclib/siclib.hpp"
 #include <pybind11/embed.h>
 #include <iostream>
+#include <cassert>
 int main()
 {
 	pybind11::scoped_interpreter guard{};
@@ -30,5 +31,6 @@ int main()
 		std::cerr << my_view.m_storage->m_data.data() << "\n";
 		std::cerr << t_view.m_storage->m_data.data();
 	}
-	return 1;
+	assert(false);  // just to see std::cerr
+	return 0;
 }
