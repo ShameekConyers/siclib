@@ -294,8 +294,8 @@ TensorView TensorView::operator+ (TensorView& other)
 }
 
 
-TensorView TensorView::unitary_op(
-	const std::function<double(double)>& inp_unitary_op)
+TensorView TensorView::unary_op(
+	const std::function<double(double)>& inp_unitary_op) const
 {
 	int c_idx = 0;
 	int counter = 1;

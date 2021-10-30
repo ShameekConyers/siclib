@@ -101,16 +101,16 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 	Approximation:
 	```python
-	>>> from pysiclib import numerical as snum
+	>>> from pysiclib import numerical
 	>>> def example_func(x):
 	... 	return x ** 2 + 2 * x - 1
 	>>> target_y = 14
-	>>> snum.equation_solution(example_func, target_y)
+	>>> numerical.equation_solution(example_func, target_y)
 	3.0
 	>>> def no_solution_example(x):
 	... 	return x ** 2 + 1
 	>>> target_y = 0
-	>>> snum.equation_solution(no_solution_example, target_y)
+	>>> numerical.equation_solution(no_solution_example, target_y)
 	None
 	```
 
@@ -130,11 +130,10 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 	Approximation:
 	```python
-	>>> from pysiclib import numerical as snum
-	>>> import numpy as np
-	>>> data = np.array([x ** 2 + x for x in range(11)])
+	>>> from pysiclib import numerical, linalg
+	>>> data = linalg.Tensor([x ** 2 + x for x in range(11)])
 	>>> x_index = 5
-	>>> snum.derivative_at_index(data, x_index)
+	>>> numerical.derivative_at_index(data, x_index)
 	11.0
 	```
 
@@ -154,14 +153,15 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 	Approximation:
 	```python
-	>>> from pysiclib import numerical as snum
-	>>> import numpy as np
+	>>> from pysiclib import numerical, linalg
 	>>> unit_steps = 100
-	>>> data = np.array(
-	... 	[(x / unit_steps) ** 2 + (x / unit_steps) for x in range(5 * unit_steps)])
+	>>> data = linalg.Tensor(
+	...			[(x / unit_steps) ** 2 + (x / unit_steps) for x in
+	...			range(11 * unit_steps)])]
+	...		)
 	>>> int_start, int_end = 0, 5 * unit_steps
 	... #note the interval [start, end] is integrated over
-	>>> snum.integral_index_interval(data, int_start, int_end)
+	>>> numerical.integral_index_interval(data, int_start, int_end)
 	54.107366
 	```
 
@@ -210,17 +210,17 @@ than using symbolic manipulation to find exact solutions to solve math problems
 
 	Approximation:
 	```python
-	>>> from pysiclib import numerical as snum
-	>>> import numpy as np
+	>>> from pysiclib import numerical, linalg
 	>>> def system_of_eqs(t, var_arr):
-	... 	dvar_arr = np.array([0.0, 0.0])
+	...   var_arr = var_arr.get_buffer()[:] #temporary for now
+	... 	dvar_arr = [0.0, 0.0]
 	... 	dvar_arr[0] = -4 * var_arr[0] + 3 * var_arr[1] + 6
 	... 	dvar_arr[1] = 0.6 * dvar_arr[0] - 0.2 * var_arr[1]
-	... 	return dvar_arr
-	>>> init_cond = np.array([0.0, 0.0])
+	... 	return linalg.Tensor(dvar_arr)
+	>>> init_cond = linalg.Tensor([0.0, 0.0])
 	>>> init_val = 0.0
 	>>> target_val = 0.5
-	>>> snum.initial_value_problem(
+	>>> numerical.initial_value_problem(
 	... 	system_of_eqs, init_cond, target_val, init_val)
 	[1.79352705 1.01441545]
 

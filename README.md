@@ -8,23 +8,23 @@ pysiclib is the python interface.
 Can be found here <a href ="https://shameekconyers.com/projects/siclib">here</a>
 
 ## pysiclib -  Python Installation Instructions
-<!-- ```shell
-pip install sicnumerical
-``` -->
-Make sure you have CMake installed with an appropriate compiler, then make sure
-you working directory is the same as the root of this project
+
+Make sure you have Andaconda and a C++ compiler installed on your system
 ```shell
-$ pip install -r requirements.txt &&
- python setup.py bdist_wheel &&
- pip install dist/*
+$ conda install pybind11 &&
+  git clone https://github.com/ShameekConyers/siclib &&
+  cd siclib &&
+  pip install -r requirements.txt &&
+  python setup.py bdist_wheel &&
+  pip install dist/pysiclib-0.0.6-cp38-none-any.whl
 
 $ python
 >>> import pysiclib
 ```
 
-
-In the future I will have the project uploaded to pypi so you can install from
-just pip.
+Even though I have this uploaded to PyPi so you can install from
+just pip, i've been having issues with cross-platform getting builds
+working proprly - until then above is the most straightforward way
 
 ## Current Modules
 

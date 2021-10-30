@@ -78,7 +78,7 @@ TensorView find_stddev(TensorView& target, size_t dim)
 		return powl(lhs, 0.5);
 	};
 
-	return var_tensor.unitary_op(proc);
+	return var_tensor.unary_op(proc);
 }
 
 TensorView find_skew(TensorView& target, size_t dim)

@@ -24,12 +24,12 @@ The Tensor is the general data structure of this Library. However, they are fair
 general Tensor Library.
 
 # Justification of Implementation
-The general idea work with pure functions and views to allow refactoring into
-optimized Implementation later - this (hopefully) will allow operations which are "safe" to be parallelizable sent to the GPU or through BLAS routines
----
-<!-- ## Example Project
+The general idea is to work with a composition of pure functions and views to allow refactoring into an optimized Implementation later - this will allow operations which are "safe" to be made parallelized oon the CPU or GPU
 
-An Example utilization can be found <a href=https://github.com/ShameekConyers/siclib> here </a> -->
+---
+## Neural Network Module Example
+
+An Example utilization can be found <a href=https://shameekconyers.com/projects/pysiclib_neuralnet_demo> here </a>
 
 ## Example Functionality
 

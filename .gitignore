@@ -10,6 +10,5 @@ dist
 **.ipynb_checkpoints
 **.pytest**
 data/large/**
-data/large/mnist_train.csv
-data/large/mnist_test.csv
+
 setup.zsh.storage

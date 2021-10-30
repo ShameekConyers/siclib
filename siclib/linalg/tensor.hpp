@@ -24,6 +24,8 @@ class TensorObj {
 
 class TensorView : public TensorObj {
 public:
+	typedef double value_type;
+
 	TensorView(
 		pybind11::array_t<double> numpy_array
 	);
@@ -80,13 +82,14 @@ public:
 	void set_val(const std::vector<size_t>& selection, double val);
 
 
-	double& operator[] (size_t element);
+	double& operator[] (size_t element); // TODO
 	TensorView operator+ (TensorView& other);
 	TensorView operator- (TensorView& other);
 
-	TensorView unitary_op(
+	TensorView unary_op(
 		const std::function<double(double)>& func
-	);
+	) const;
+
 	TensorView binary_element_wise_op(const TensorView& other,
 		const std::function<double(double, double)>& func
 	) const;

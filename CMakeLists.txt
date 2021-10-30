@@ -10,8 +10,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 
-set(CMAKE_CXX_FLAGS "-D_GLIBCXX_ASSERTIONS")
-set(CMAKE_CXX_FLAGS_DEBUG "-Og -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fsanitize-recover=address -fsanitize=address -fsanitize=undefined, -fsanitize=float-divide-by-zero, -fsanitize=unreachable, -fsanitize=return, -fsanitize=null, -fsanitize=bounds, -fsanitize=alignment"
+# set(CMAKE_CXX_FLAGS "-D_GLIBCXX_ASSERTIONS")
+set(CMAKE_CXX_FLAGS_DEBUG "-Og -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fsanitize-recover=address -fsanitize=address -fsanitize=undefined, -fsanitize=float-divide-by-zero, -fsanitize=unreachable, -fsanitize=return, -fsanitize=null, -fsanitize=bounds, -fsanitize=alignment -D_GLIBCXX_ASSERTIONS"
 )
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O2" )
@@ -35,6 +35,6 @@ file(GLOB nest_src CONFIGURE_DEPENDS
 pybind11_add_module(
 	_pysiclib ${my_src} ${nest_src})
 
-add_executable(main.out tests/main.cpp ${nest_src})
-target_link_libraries(main.out PRIVATE pybind11::embed)
-add_test(test1 main.out)
+# add_executable(main.out tests/main.cpp ${nest_src})
+# target_link_libraries(main.out PRIVATE pybind11::embed)
+# add_test(test1 main.out)

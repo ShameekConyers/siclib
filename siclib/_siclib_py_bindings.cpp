@@ -45,8 +45,8 @@ PYBIND11_MODULE(_pysiclib, m)
 			py::arg("other_view")
 		)
 		.def(
-			"unitary_op",
-			&sic::TensorView::unitary_op
+			"unary_op",
+			&sic::TensorView::unary_op
 		)
 		.def(
 			"binary_element_wise_op",
@@ -151,7 +151,7 @@ PYBIND11_MODULE(_pysiclib, m)
 		&sic::rand_normal_tensor);
 
 	stats.def(
-		"rand_normal_tensor",
+		"rand_uniform_tensor",
 		&sic::rand_uniform_tensor);
 
 	// adaptive

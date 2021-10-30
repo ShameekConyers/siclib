@@ -58,7 +58,7 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 		layer_output = m_weights[i]
 			.matmul(layer_input);
 		raw_output_vec.push_back(layer_output); // hi
-		layer_input = layer_output.unitary_op(m_transform);
+		layer_input = layer_output.unary_op(m_transform);
 		output_vec.push_back(layer_input); // ho
 	}
 
@@ -69,14 +69,14 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 
 	// backprop error
 	error_vec.push_front(target_values - output_vec.back());
-		// .unitary_op(func));
+		// .unary_op(func));
 	for (ssize_t i = m_weights.size() - 2; i >= 0; i--) {
 		// error
 		TensorView layer_error = m_weights[i + 1]
 			.transpose()
 			.matmul(error_vec.front());
 			// .binary_element_wise_op(
-			// 	raw_output_vec[i].unitary_op(m_transform_deriv),
+			// 	raw_output_vec[i].unary_op(m_transform_deriv),
 			// 	std::multiplies());
 
 		error_vec.push_front(layer_error);
@@ -99,10 +99,10 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 
 		TensorView delta_weights = error_vec[i]
 			.binary_element_wise_op(
-				raw_output_vec[i].unitary_op(m_transform_deriv), std::multiplies())
+				raw_output_vec[i].unary_op(m_transform_deriv), std::multiplies())
 			.matmul(target)
-			.unitary_op(learn_func);
-		TensorView delta_bias = error_vec[i].unitary_op(learn_func);
+			.unary_op(learn_func);
+		TensorView delta_bias = error_vec[i].unary_op(learn_func);
 
 		// if (i != 0) {
 		// 	std::cerr << "YOU:\n";
@@ -144,7 +144,7 @@ TensorView ProtoNet::query_net(TensorView input)
 		layer_output = m_weights[i]
 			.matmul(layer_input)
 			// .binary_element_wise_op(m_bias[i], std::plus())
-			.unitary_op(m_transform);
+			.unary_op(m_transform);
 		layer_input = layer_output;
 	}
 

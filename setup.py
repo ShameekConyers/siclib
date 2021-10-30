@@ -152,18 +152,18 @@ def renamer():
 # logic and declaration, and simpler if you include description/version in a file.
 setup_kwargs = dict(
     name="pysiclib",
-    version="0.0.4",
+    version="0.0.6",
     author="Shameek Conyers",
 		author_email="sic@usf.edu",
-    description="A Python Numerical Analysis Project",
+    description="A General Scientific Computation Library",
     long_description="",
-		url="https://github.com/ShameekConyers/sicnumerical",
+		url="https://ShameekConyers.com/siclib",
     ext_modules=[CMakeExtension("pysiclib._pysiclib")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
 		packages=find_packages(),
     extras_require={"test": ["pytest"]},
-		package_data={'': ['*', 'LICENSE'], "pysiclib": ["**/*.pyi", "**/*.py"]},
+		package_data={'': ['*', 'LICENSE', 'tests/**/*'], "pysiclib": ["**/*.pyi", "**/*.py"]},
     install_requires=[],
 )
 
