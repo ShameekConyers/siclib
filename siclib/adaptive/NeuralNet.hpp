@@ -32,13 +32,25 @@ public:
 	size_t m_num_hidden_layers;
 	double m_learning_rate;
 
-	// Moving forward remove this
-	const std::function<double(double)> m_transform = [](double x)
+	// // Moving forward remove this
+	// const std::function<double(double)> m_transform = [](double x)
+	// {
+	// 	// sigmoid
+	// 	return (1 / (1 + exp(-x)));
+	// };
+	// const std::function<double(double)> m_transform_deriv = [](double x)
+	// {
+	// 	// sigmoid * (1 - sigmoid)
+	// 	double val = 1 / (1 + exp(-x));
+	// 	return val * (1 - val);
+	// };
+
+	double (*m_transform)(double) = [](double x)
 	{
 		// sigmoid
 		return (1 / (1 + exp(-x)));
 	};
-	const std::function<double(double)> m_transform_deriv = [](double x)
+	double (*m_transform_deriv)(double) = [](double x)
 	{
 		// sigmoid * (1 - sigmoid)
 		double val = 1 / (1 + exp(-x));

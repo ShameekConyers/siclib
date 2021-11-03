@@ -62,7 +62,7 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 		output_vec.push_back(layer_input); // ho
 	}
 
-	auto <double(double)> func = [](double x)
+	auto func = [](double x)
 	{
 		return -2 * x;
 	};

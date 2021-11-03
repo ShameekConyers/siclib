@@ -39,7 +39,7 @@ counter = 0
 score = []
 nscore = []
 
-for record in train_data[:200]:
+for record in train_data[:]:
 	if(counter % 100 == 0):
 		print("{}...".format(counter))
 	counter += 1
@@ -86,7 +86,7 @@ print("\n\n\n\n\n")
 
 score = []
 test_counter = 0
-for record in test_data[:100]:
+for record in test_data[:]:
 	test_counter += 1
 
 	all_values = record.split(',')

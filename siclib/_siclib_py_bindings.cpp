@@ -180,14 +180,6 @@ PYBIND11_MODULE(_pysiclib, m)
 			"m_bias",
 			&sic::ProtoNet::m_bias
 		)
-		.def_readonly(
-			"m_transform",
-			&sic::ProtoNet::m_transform
-		)
-		.def_readonly(
-			"m_transform_deriv",
-			&sic::ProtoNet::m_transform_deriv
-		)
 		;
 
 }
