@@ -62,7 +62,7 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 		output_vec.push_back(layer_input); // ho
 	}
 
-	std::function <double(double)> func = [](double x)
+	auto <double(double)> func = [](double x)
 	{
 		return -2 * x;
 	};
@@ -84,7 +84,7 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 
 	// update
 	double lr = m_learning_rate;
-	std::function<double(double)> learn_func = [lr](double x)
+	auto learn_func = [lr](double x)
 	{
 		return lr * x;
 	};

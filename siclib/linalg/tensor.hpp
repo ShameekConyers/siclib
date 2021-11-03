@@ -14,9 +14,8 @@
 namespace sic
 {
 
-struct TensorStorage {
-	std::vector<double> m_data;
-};
+using TensorDataType = double;
+using TensorStorage = std::vector<TensorDataType>;
 
 class TensorObj {
 
@@ -31,7 +30,7 @@ public:
 	);
 
 	TensorView(
-		std::vector<double> input_data,
+		const std::vector<double>& input_data,
 		std::vector<size_t> input_shape = {},
 		std::vector<size_t> input_stride = {},
 		size_t offset = 0
@@ -39,35 +38,16 @@ public:
 
 	TensorView(
 		const TensorView& other_view
-	)
-	{
-		m_shape = other_view.m_shape;
-		m_stride = other_view.m_stride;
-		m_offset = other_view.m_offset;
-		m_storage = other_view.m_storage;
-	};
+	);
 
 	TensorView(
 		const TensorView& other_view,
 		std::vector<size_t> input_shape,
 		std::vector<size_t> input_stride,
 		size_t offset
-	)
-	{
-		m_shape = input_shape;
-		m_stride = input_stride;
-		m_offset = offset;
-		m_storage = other_view.m_storage;
-	};
+	);
 
-	TensorView& operator=(const TensorView& other_view)
-	{
-		m_shape = other_view.m_shape;
-		m_stride = other_view.m_stride;
-		m_offset = other_view.m_offset;
-		m_storage = other_view.m_storage;
-		return *this;
-	}
+	TensorView& operator=(const TensorView& other_view);
 
 	// TensorView(TensorView&& other) = default;
 	// TensorView& operator=(TensorView&& other) = default;
@@ -86,16 +66,20 @@ public:
 	TensorView operator+ (TensorView& other);
 	TensorView operator- (TensorView& other);
 
+	template<typename Fn>
 	TensorView unary_op(
-		const std::function<double(double)>& func
+		const Fn& func
 	) const;
 
-	TensorView binary_element_wise_op(const TensorView& other,
-		const std::function<double(double, double)>& func
+	template<typename Fn>
+	TensorView binary_element_wise_op(
+		const TensorView& other,
+		const Fn& func
 	) const;
 
+	template<typename Fn>
 	TensorView fold_op(
-		const std::function<double(double, double)>& binary_op,
+		const Fn& binary_op,
 		double inital_value,
 		size_t target_dim,
 		bool left_op = true
@@ -141,8 +125,8 @@ public:
 // protected:
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
-	mutable std::vector<size_t> m_shape;
-	mutable std::vector<size_t> m_stride;
+	std::vector<size_t> m_shape;
+	std::vector<size_t> m_stride;
 
 };
 

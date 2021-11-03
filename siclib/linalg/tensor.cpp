@@ -35,13 +35,6 @@ std::ostream& operator<<(std::ostream& output, const TensorView& view)
 	ssize_t lst_sig = this_shape.size() - 1;
 
 	// TODO format to right, keeping in mind decimal
-	// output << std::fixed;
-	// output.precision(5);
-	// size_t padding_necessary = 0;
-	// for (size_t i = 0; i < view.m_storage->m_data.size(); i++) {
-	// 	std::string tmp = std::to_string(view.m_storage->m_data[i]);
-	// 	padding_necessary = std::max(tmp.size(), padding_necessary);
-	// }
 
 	for (size_t i = 0; i < this_shape.size(); i++) output << "[";
 	while (flag) {
@@ -137,9 +130,8 @@ TensorView::TensorView(pybind11::array_t<double> numpy_array)
 
 }
 
-
 TensorView::TensorView(
-	std::vector<double> input_data,
+	const std::vector<double>& input_data,
 	std::vector<size_t> input_shape,
 	std::vector<size_t> input_stride,
 	size_t offset)
@@ -155,19 +147,52 @@ TensorView::TensorView(
 	m_storage = std::make_shared<TensorStorage>(TensorStorage{ input_data });
 }
 
+TensorView::TensorView(
+	const TensorView& other_view
+)
+{
+	m_shape = other_view.m_shape;
+	m_stride = other_view.m_stride;
+	m_offset = other_view.m_offset;
+	m_storage = other_view.m_storage;
+};
+
+TensorView::TensorView(
+	const TensorView& other_view,
+	std::vector<size_t> input_shape,
+	std::vector<size_t> input_stride,
+	size_t offset
+)
+{
+	m_shape = input_shape;
+	m_stride = input_stride;
+	m_offset = offset;
+	m_storage = other_view.m_storage;
+};
+
+TensorView& TensorView::operator=(const TensorView& other_view)
+{
+	m_shape = other_view.m_shape;
+	m_stride = other_view.m_stride;
+	m_offset = other_view.m_offset;
+	m_storage = other_view.m_storage;
+	return *this;
+}
+
+
 const std::vector<double>& TensorView::view_buffer() const
 {
-	return m_storage->m_data;
+	return *m_storage;
 }
 
 std::vector<double>& TensorView::get_buffer()
 {
-	return m_storage->m_data;
+	return *m_storage;
 }
 
 TensorView TensorView::deep_copy() const
 {
-	return TensorView{ m_storage->m_data, m_shape, m_stride };
+	return TensorView{ *m_storage, m_shape, m_stride };
 }
 
 pybind11::array_t<double> TensorView::to_numpy()
@@ -177,7 +202,7 @@ pybind11::array_t<double> TensorView::to_numpy()
 		stride_in_bytes[i] = stride_in_bytes[i] * sizeof(double);
 	}
 	pybind11::buffer_info result_info(
-		m_storage->m_data.data(),
+		m_storage->data(),
 		sizeof(double),
 		pybind11::format_descriptor<double>::format(),
 		m_shape.size(),
@@ -257,7 +282,7 @@ const
 			throw std::runtime_error("selection not valid. e2");
 		}
 	}
-	return m_storage->m_data[m_offset + target_index];
+	return (*m_storage)[m_offset + target_index];
 }
 
 void TensorView::set_val(const std::vector<size_t>& selection, double val)
@@ -281,7 +306,7 @@ void TensorView::set_val(const std::vector<size_t>& selection, double val)
 			throw std::runtime_error("selection not valid. e2");
 		}
 	}
-	m_storage->m_data[m_offset + target_index] = val;
+	(*m_storage)[m_offset + target_index] = val;
 }
 
 TensorView TensorView::operator- (TensorView& other)
@@ -293,9 +318,9 @@ TensorView TensorView::operator+ (TensorView& other)
 	return binary_element_wise_op(other, std::plus());
 }
 
-
+template<typename Fn>
 TensorView TensorView::unary_op(
-	const std::function<double(double)>& inp_unitary_op) const
+	const Fn& inp_unitary_op) const
 {
 	int c_idx = 0;
 	int counter = 1;
@@ -341,9 +366,10 @@ TensorView TensorView::unary_op(
 	return result_tensor;
 }
 
-
-TensorView TensorView::binary_element_wise_op(const
-	TensorView& other, const std::function<double(double, double)>& binary_op)
+template<typename Fn>
+TensorView TensorView::binary_element_wise_op(
+	const TensorView& other,
+	const Fn& binary_op)
 	const
 {
 
@@ -417,8 +443,9 @@ TensorView TensorView::binary_element_wise_op(const
 	return res_tensor;
 }
 
+template<typename Fn>
 TensorView TensorView::fold_op(
-	const std::function<double(double, double)>& binary_op,
+	const Fn& binary_op,
 	double inital_value,
 	size_t target_dim,
 	bool left_op)

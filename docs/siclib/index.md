@@ -26,6 +26,15 @@ general Tensor Library.
 # Justification of Implementation
 The general idea is to work with a composition of pure functions and views to allow refactoring into an optimized Implementation later - this will allow operations which are "safe" to be made parallelized oon the CPU or GPU
 
+
+## Progress of Optimization.
+
+I'm looking into SYCL for vectorizing operations since CUDA already dominates the space and SYCL is usable on a wider set of systems, including iGPU's, and OpenMP allows easy parallelization over multiple machines.
+Thus after getting more aquanted with SYCL-BLAS I will move over to using that instead.
+Furthermore after profiling the overuse of std::function over C++ templates function causes an overhead as well as
+hindering the ability of the compiler to auto-vectorize
+
+
 ---
 ## Neural Network Module Example
 

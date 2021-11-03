@@ -46,11 +46,11 @@ PYBIND11_MODULE(_pysiclib, m)
 		)
 		.def(
 			"unary_op",
-			&sic::TensorView::unary_op
+			&sic::TensorView::unary_op<std::function<double(double)>>
 		)
 		.def(
 			"binary_element_wise_op",
-			&sic::TensorView::binary_element_wise_op
+			&sic::TensorView::binary_element_wise_op<std::function<double(double, double)>>
 		)
 		.def(
 			"get_buffer",
@@ -77,7 +77,7 @@ PYBIND11_MODULE(_pysiclib, m)
 		)
 		.def(
 			"fold_op",
-			&sic::TensorView::fold_op
+			&sic::TensorView::fold_op<std::function<double(double, double)>>
 		)
 		.def(
 			"deep_copy",

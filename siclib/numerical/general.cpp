@@ -64,7 +64,7 @@ double integral_index_interval(
 		);
 	}
 
-	auto input_buffer = input.m_storage->m_data; // compatability
+	auto input_buffer = *(input.m_storage); // compatability
 
 	double endpoints_index_sum = input_buffer[0]
 		+ input_buffer[input_size - 1];

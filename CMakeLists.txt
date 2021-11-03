@@ -1,3 +1,5 @@
+set(CMAKE_CXX_COMPILER syclcc)
+
 cmake_minimum_required(VERSION 3.18)
 project(pysiclib LANGUAGES CXX)
 enable_testing()
@@ -15,6 +17,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Og -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTION
 )
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O2" )
+
+if(APPLE)
+	find_library(CPU_BLAS Accelerate)
+endif()
+
+
 
 # set(Python_ROOT_DIR "/opt/homebrew/anaconda3/bin/python")
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/..)
@@ -35,6 +43,8 @@ file(GLOB nest_src CONFIGURE_DEPENDS
 pybind11_add_module(
 	_pysiclib ${my_src} ${nest_src})
 
+target_link_libraries(_pysiclib PRIVATE ${CPU_BLAS})
+
 # add_executable(main.out tests/main.cpp ${nest_src})
-# target_link_libraries(main.out PRIVATE pybind11::embed)
+
 # add_test(test1 main.out)
