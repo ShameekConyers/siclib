@@ -4,3 +4,6 @@ testing framework
 
 # stats
 generalized generator
+
+#Tensor
+allocate unkeep vectors on stack

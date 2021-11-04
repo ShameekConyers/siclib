@@ -17,25 +17,27 @@ The various modules can be navigated to the left
 ## Source Code & Installation
 Source code can be found <a href=https://github.com/ShameekConyers/siclib> here </a>
 
+---
+
+## Project Scope and Purpose
+
+Despite there being much better Implementations of similar concepts, the purpose
+of this is for me to get a better lower level understanding on applied scientific
+computation. and allowing me to implement algorithms/methods I come across. Hence this
+is more akin to a research project instead of a serious production ready implementation.
 
 ## Implementation Notes
 
 The Tensor is the general data structure of this Library. However, they are fairly unoptimized as they are implemented with using generalizations, functional programming and using Data Views. I recommend PyTorch or TorchLib instead for a
 general Tensor Library.
 
-# Justification of Implementation
 The general idea is to work with a composition of pure functions and views to allow refactoring into an optimized Implementation later - this will allow operations which are "safe" to be made parallelized oon the CPU or GPU
 
-
-## Progress of Optimization.
-
-I'm looking into SYCL for vectorizing operations since CUDA already dominates the space and SYCL is usable on a wider set of systems, including iGPU's, and OpenMP allows easy parallelization over multiple machines.
-Thus after getting more aquanted with SYCL-BLAS I will move over to using that instead.
-Furthermore after profiling the overuse of std::function over C++ templates function causes an overhead as well as
-hindering the ability of the compiler to auto-vectorize
-
+I'm looking into SYCL since CUDA already dominates the space and SYCL is usable on a wider set of systems, including iGPU's. Hence I will eventually
+move over to SYCL-BLAS instead of BLAS when I decide to include GPU operations.
 
 ---
+
 ## Neural Network Module Example
 
 An Example utilization can be found <a href=https://shameekconyers.com/projects/pysiclib_neuralnet_demo> here </a>

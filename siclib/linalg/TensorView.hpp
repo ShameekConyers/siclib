@@ -84,11 +84,11 @@ public:
 		bool left_op = true
 	);
 
-	TensorView transpose(ssize_t dim_1 = -1, ssize_t dim_2 = -1);
+	TensorView transpose(ssize_t dim_1 = -1, ssize_t dim_2 = -1) const;
 
 	// matrix methods
 	TensorView matmul(const TensorView& other) const;
-	TensorView mat_inv() const; // TODO
+	TensorView matinv() const; // TODO
 
 	// see numpy dot
 	TensorView dotprod(const TensorView& other) const; // TODO
@@ -103,7 +103,7 @@ public:
 		size_t offset = 0
 	);
 
-	//
+	// transforms
 	std::tuple<std::vector<size_t>, TensorView, TensorView> do_broadcast(
 		const TensorView& other) const;
 
@@ -120,6 +120,8 @@ public:
 	bool is_matrix() const;
 	bool is_vector() const;
 	bool is_aligned() const;
+
+	TensorView switch_mat_major_order() const;
 
 // protected:
 	std::shared_ptr<TensorStorage> m_storage;

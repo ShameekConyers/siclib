@@ -9,7 +9,9 @@ Can be found here <a href ="https://shameekconyers.com/projects/siclib">here</a>
 
 ## pysiclib -  Python Installation Instructions
 
-Make sure you have Andaconda and a C++ compiler installed on your system
+Make sure you have Andaconda and a C++ compiler installed on your system.
+If you don't have an Apple computer make sure you have installed OpenBlas.
+
 ```shell
 $ conda install pybind11 &&
   git clone https://github.com/ShameekConyers/siclib &&

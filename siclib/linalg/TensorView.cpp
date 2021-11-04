@@ -1,11 +1,11 @@
 
-#include "Tensor.hpp"
+#include "TensorView.hpp"
 #include <iostream>
 
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
 #else
-#include <cblas.h>
+#include <OpenBlas/cblas.h>
 #endif
 
 namespace sic
@@ -25,14 +25,11 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
 
 std::ostream& operator<<(std::ostream& output, const TensorView& view)
 {
-
-
 	output << "Tensor: \n";
 	int c_idx = 0;
 	int counter = 1;
 
 	std::vector<size_t> this_shape = view.m_shape;
-
 
 	std::vector<size_t> cur_this(this_shape.size());
 	size_t num_spaces = 0;
@@ -389,6 +386,46 @@ TensorView TensorView::matmul(const TensorView& other) const
 	return result;
 }
 
+TensorView TensorView::matinv() const
+{
+	if (!is_matrix()) {
+		throw std::runtime_error("Not a Matrix");
+	}
+	if (m_shape[0] != m_shape[1]) {
+		throw std::runtime_error("Not a Square Matrix");
+	}
+	TensorView this_col_major = switch_mat_major_order();
+
+	int mat_dim = m_shape[1];
+	int LWORK = mat_dim * mat_dim;
+
+	int INFO = 0;
+
+	std::vector<int> IPIV(mat_dim);
+	std::vector<double> WORK(LWORK);
+
+	dgetrf_(
+		&mat_dim,
+		&mat_dim,
+		const_cast<double*>(this_col_major.m_storage->data()),
+		&mat_dim,
+		const_cast<int*>(IPIV.data()),
+		&INFO)
+		;
+
+	dgetri_(
+		&mat_dim,
+		const_cast<double*>(this_col_major.m_storage->data()),
+		&mat_dim,
+		const_cast<int*>(IPIV.data()),
+		const_cast<double*>(WORK.data()),
+		&LWORK,
+		&INFO
+	);
+
+	return this_col_major.switch_mat_major_order();
+
+}
 
 TensorView TensorView::dotprod(const TensorView& other) const
 {
@@ -585,7 +622,7 @@ void TensorView::set_shape_stride(const std::vector<double>& input_data,
 	m_offset = offset;
 }
 
-TensorView TensorView::transpose(ssize_t dim_1, ssize_t dim_2)
+TensorView TensorView::transpose(ssize_t dim_1, ssize_t dim_2) const
 {
 	if (dim_1 != -1 && dim_2 != -1) {
 		if (dim_1 >= m_shape.size() || dim_2 >= m_shape.size()) {
@@ -704,4 +741,13 @@ bool TensorView::is_aligned() const
 	return true;
 }
 
+TensorView TensorView::switch_mat_major_order() const
+{
+	if (!is_matrix()) {
+		throw std::runtime_error("Not a Matrix");
+	}
+
+	TensorView result = transpose().do_mat_alignment().transpose();
+	return result;
+}
 } //

@@ -20,6 +20,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2" )
 
 if(APPLE)
 	find_library(CPU_BLAS Accelerate)
+else()
+	find_library(CPU_BLAS OpenBlas)
 endif()
 
 
