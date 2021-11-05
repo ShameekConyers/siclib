@@ -97,6 +97,10 @@ PYBIND11_MODULE(_pysiclib, m)
 			&sic::TensorView::matmul
 		)
 		.def(
+			"matinv",
+			&sic::TensorView::matinv
+		)
+		.def(
 			"slice_view",
 			&sic::TensorView::slice_view
 		)
@@ -179,7 +183,21 @@ PYBIND11_MODULE(_pysiclib, m)
 		.def_readonly(
 			"m_bias",
 			&sic::ProtoNet::m_bias
+		);
+
+
+	// Models
+	py::module_ models = m.def_submodule("models");
+
+	py::class_<sic::LinearModel>(models, "LinearModel")
+		.def(py::init <>())
+		.def(
+			"fit_model",
+			&sic::LinearModel::fit_model
 		)
-		;
+		.def(
+			"predict",
+			&sic::LinearModel::predict
+		);
 
 }

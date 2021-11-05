@@ -61,3 +61,9 @@ print(v4.to_numpy())
 # for count in range(0, 101):
 # 	new_arr = np.append(new_arr, [derivative_at_index(arr, count)])
 # print(new_arr)
+
+
+l = np.array([[1, 2], [3, 4]])
+r = pysiclib.linalg.Tensor(l)
+rinv = r.matinv()
+print(rinv)

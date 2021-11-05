@@ -42,3 +42,7 @@ A collection of various procedures from statistics
 ### Adaptive (name pending)
 
 A collection of adaptive learning methods.
+
+### Models
+
+A collection of models for fitting data.

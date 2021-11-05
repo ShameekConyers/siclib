@@ -5,12 +5,12 @@ namespace sic
 {
 
 
-class SupervisedModel {
-	void fit_model(const TensorView& x_vals, const TensorView& y_vals);
 
-};
+struct LinearModel {
+	LinearModel()
+	{
 
-class LinearModel : public SupervisedModel {
+	};
 	void fit_model(
 		const TensorView& x_vals,
 		const TensorView& y_vals
@@ -18,13 +18,13 @@ class LinearModel : public SupervisedModel {
 
 	TensorView predict(
 		const TensorView& x_vals
-	);
+	) const;
 
 	TensorView m_coefficients;
 };
 
 
-class KNearestNeighbors : public SupervisedModel {
+class KNearestNeighbors {
 
 	void fit_model(
 		const TensorView& x_vals,
