@@ -6,4 +6,4 @@ testing framework
 generalized generator
 
 #Tensor
-allocate unkeep vectors on stack
+allocate unkeep vectors on stack and look into memory pools

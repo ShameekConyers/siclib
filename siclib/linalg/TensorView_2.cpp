@@ -106,13 +106,25 @@ void TensorView::set_val(const std::vector<size_t>& selection, double val)
 	(*m_storage)[m_offset + target_index] = val;
 }
 
-TensorView TensorView::operator- (TensorView& other)
+TensorView TensorView::operator- (const TensorView& other) const
 {
 	return binary_element_wise_op(other, std::minus());
 }
-TensorView TensorView::operator+ (TensorView& other)
+TensorView TensorView::operator+ (const TensorView& other) const
 {
 	return binary_element_wise_op(other, std::plus());
+}
+bool TensorView::operator== (const TensorView& other) const
+{
+	if (
+		*m_storage == *(other.m_storage)
+		&& m_shape == other.m_shape
+		&& m_stride == other.m_stride
+		&& m_offset == other.m_offset
+		) {
+		return true;
+	}
+	else return false;
 }
 
 
@@ -532,6 +544,7 @@ bool TensorView::is_aligned() const
 			return false;
 		}
 	}
+	if (m_offset != 0) return false;
 	return true;
 }
 

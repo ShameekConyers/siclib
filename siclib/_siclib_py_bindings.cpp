@@ -193,11 +193,29 @@ PYBIND11_MODULE(_pysiclib, m)
 		.def(py::init <>())
 		.def(
 			"fit_model",
-			&sic::LinearModel::fit_model
+			&sic::LinearModel::fit_model,
+			py::arg("x_vals"),
+			py::arg("y_vals"),
+			py::arg("fit_procedure") = 0
 		)
 		.def(
 			"predict",
 			&sic::LinearModel::predict
 		);
 
+
+	py::class_<sic::KNearestNeighbors>(models, "KNearestNeighbors")
+		.def(py::init <>())
+		.def(
+			"fit_model",
+			&sic::KNearestNeighbors::fit_model,
+			py::arg("x_vals"),
+			py::arg("y_vals"),
+			py::arg("num_neighbors"),
+			py::arg("metric") = 0
+		)
+		.def(
+			"predict",
+			&sic::KNearestNeighbors::predict
+		);
 }

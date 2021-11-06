@@ -9,6 +9,35 @@
 #endif
 
 
+// namespace std
+// {
+
+// template<>
+// struct hash<std::vector<double>> {
+// 	size_t operator() (const std::vector<double>& input)
+// 	{
+// 		size_t bound = std::min(input.size(), (size_t)10);
+// 		double counter = 0.0;
+
+// 		for (size_t i = 0; i < bound; i += input.size() / bound) {
+// 			counter = input[i] * i * 2.0;
+// 		}
+
+// 		return ceil(counter);
+// 	}
+// };
+
+// template<>
+// struct hash<sic::TensorView> {
+// 	size_t operator() (const sic::TensorView& input)
+// 	{
+// 		std::vector<double> v = input.view_buffer();
+// 		return (size_t)hash<std::vector<double>>{}(v);
+// 	}
+// };
+
+// } //
+
 namespace sic
 {
 
@@ -99,7 +128,10 @@ std::ostream& operator<<(std::ostream& output, const TensorView& view)
 
 TensorView::TensorView()
 {
-
+	m_storage = std::make_shared<TensorStorage>(TensorStorage{ {} });
+	m_shape = { 0 };
+	m_stride = { sizeof(double) };
+	m_offset = 0;
 }
 
 TensorView::TensorView(pybind11::array_t<double> numpy_array)

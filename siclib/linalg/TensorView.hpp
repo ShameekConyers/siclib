@@ -10,17 +10,15 @@
 
 
 
+
+
 namespace sic
 {
 
-using TensorDataType = double;
-using TensorStorage = std::vector<TensorDataType>;
 
-class TensorObj {
+using TensorStorage = std::vector<double>;
 
-};
-
-class TensorView : public TensorObj {
+class TensorView {
 public:
 	typedef double value_type;
 
@@ -29,7 +27,7 @@ public:
 	);
 
 	TensorView(
-	); // TODO
+	);
 
 	TensorView(
 		const std::vector<double>& input_data,
@@ -65,8 +63,9 @@ public:
 
 
 	double& operator[] (size_t element); // TODO
-	TensorView operator+ (TensorView& other);
-	TensorView operator- (TensorView& other);
+	TensorView operator+ (const TensorView& other) const;
+	TensorView operator- (const TensorView& other) const;
+	bool operator== (const TensorView& other) const;
 
 	template<typename Fn>
 	TensorView unary_op(
