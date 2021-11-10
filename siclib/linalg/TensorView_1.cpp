@@ -53,6 +53,19 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
 	return output;
 }
 
+template <typename T>
+std::ostream& operator<<(std::ostream& output, small_vector<T> const& values)
+{
+	output << "[";
+	for (size_t i = 0; i < values.size(); i++) {
+		output << values[i];
+		if (i != values.size() - 1) output << ", ";
+	}
+	output << "]\n";
+	return output;
+}
+
+
 std::ostream& operator<<(std::ostream& output, const TensorView& view)
 {
 	output << "Tensor: \n";
@@ -247,7 +260,7 @@ pybind11::array_t<double> TensorView::to_numpy()
 		sizeof(double),
 		pybind11::format_descriptor<double>::format(),
 		m_shape.size(),
-		m_shape,
+		(std::vector<size_t>)m_shape,
 		stride_in_bytes
 	);
 	pybind11::array_t<double> result(result_info);

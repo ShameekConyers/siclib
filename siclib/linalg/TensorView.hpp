@@ -8,6 +8,7 @@
 #include <functional>
 #include <pybind11/numpy.h>
 
+#include "../containers.hpp"
 
 
 
@@ -128,8 +129,8 @@ public:
 // protected:
 	std::shared_ptr<TensorStorage> m_storage;
 	size_t m_offset;
-	std::vector<size_t> m_shape;
-	std::vector<size_t> m_stride;
+	small_vector<size_t> m_shape;
+	small_vector<size_t> m_stride;
 
 };
 

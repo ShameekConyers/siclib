@@ -1,5 +1,4 @@
 # general
-TensorView operator==
 testing framework
 
 # stats
@@ -7,3 +6,5 @@ generalized generator
 
 #Tensor
 allocate unkeep vectors on stack and look into memory pools
+iterator
+format print
