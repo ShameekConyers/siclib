@@ -108,7 +108,10 @@ struct small_vector {
 
 	void erase(iterator input)
 	{
-		;
+		for (iterator it = input; it != end() - 1; ++it) {
+			*it = *(it + 1);
+		}
+		m_size--;
 	}
 
 	size_t size() const

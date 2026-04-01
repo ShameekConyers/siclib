@@ -314,7 +314,7 @@ TensorView TensorView::squeeze(ssize_t target_dim) const
 			throw std::runtime_error("dimension doesn't exist");
 		}
 		else if (m_shape[target_dim] != 1) {
-			std::runtime_error("non-zero dimension");
+			throw std::runtime_error("non-zero dimension");
 		}
 
 		TensorView result = *this;
