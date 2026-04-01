@@ -10,6 +10,7 @@ dist
 **.ipynb_checkpoints
 **.pytest**
 data/large/**
+.venv/
 
 setup.zsh.storage
 docs/private_docs/**

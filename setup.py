@@ -64,10 +64,19 @@ class CMakeBuild(build_ext):
         # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
         # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
         # from Python.
+        # Ensure CMake can find pybind11 from the current Python environment
+        try:
+            import pybind11
+            pybind11_cmake_dir = pybind11.get_cmake_dir()
+        except ImportError:
+            pybind11_cmake_dir = None
+
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
         ]
+        if pybind11_cmake_dir:
+            cmake_args.append("-Dpybind11_DIR={}".format(pybind11_cmake_dir))
         build_args = []
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
@@ -120,7 +129,8 @@ class CMakeBuild(build_ext):
             # if archs:
             #     cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
 
-            cmake_args += ["-DCMAKE_OSX_ARCHITECTURES=x86_64"]
+            import platform
+            cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(platform.machine())]
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
