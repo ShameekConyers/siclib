@@ -1,3 +1,5 @@
+![CI](https://github.com/ShameekConyers/siclib/actions/workflows/ci.yml/badge.svg)
+
 # siclib
 
 A C++ scientific computation library with a focus on math. pysiclib is the Python interface.

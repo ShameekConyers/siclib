@@ -5,7 +5,11 @@
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
 #else
-#include <OpenBlas/cblas.h>
+#include <cblas.h>
+extern "C" {
+	void dgetrf_(int* m, int* n, double* a, int* lda, int* ipiv, int* info);
+	void dgetri_(int* n, double* a, int* lda, int* ipiv, double* work, int* lwork, int* info);
+}
 #endif
 
 namespace sic

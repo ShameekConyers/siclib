@@ -5,7 +5,7 @@
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
 #else
-#include <OpenBlas/cblas.h>
+#include <cblas.h>
 #endif
 
 namespace sic

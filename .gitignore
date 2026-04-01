@@ -11,6 +11,8 @@ dist
 **.pytest**
 data/large/**
 .venv/
+*.so
+*.dylib
 
 setup.zsh.storage
 docs/private_docs/**

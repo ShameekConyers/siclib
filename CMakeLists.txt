@@ -2,16 +2,17 @@ cmake_minimum_required(VERSION 3.18)
 project(pysiclib LANGUAGES CXX)
 enable_testing()
 
-set(CMAKE_OSX_ARCHITECTURES ${CMAKE_SYSTEM_PROCESSOR})
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES ${CMAKE_SYSTEM_PROCESSOR})
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-
-# set(CMAKE_CXX_FLAGS "-D_GLIBCXX_ASSERTIONS")
-set(CMAKE_CXX_FLAGS_DEBUG "-Og -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fsanitize-recover=address -fsanitize=address -fsanitize=undefined, -fsanitize=float-divide-by-zero, -fsanitize=unreachable, -fsanitize=return, -fsanitize=null, -fsanitize=bounds, -fsanitize=alignment -D_GLIBCXX_ASSERTIONS"
+set(CMAKE_CXX_FLAGS_DEBUG "-Og -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fsanitize-recover=address -fsanitize=address -fsanitize=undefined -fsanitize=float-divide-by-zero -fsanitize=unreachable -fsanitize=null -fsanitize=bounds -fsanitize=alignment"
 )
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O2" )
@@ -19,7 +20,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2" )
 if(APPLE)
 	find_library(CPU_BLAS Accelerate)
 else()
-	find_library(CPU_BLAS OpenBlas)
+	find_package(BLAS REQUIRED)
+	find_package(LAPACK REQUIRED)
 endif()
 
 
@@ -43,7 +45,11 @@ file(GLOB nest_src CONFIGURE_DEPENDS
 pybind11_add_module(
 	_pysiclib ${my_src} ${nest_src})
 
-target_link_libraries(_pysiclib PRIVATE ${CPU_BLAS})
+if(APPLE)
+	target_link_libraries(_pysiclib PRIVATE ${CPU_BLAS})
+else()
+	target_link_libraries(_pysiclib PRIVATE ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+endif()
 
 # add_executable(main.out tests/main.cpp ${nest_src})
 
