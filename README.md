@@ -4,6 +4,8 @@
 
 A C++ scientific computation library with a focus on math. pysiclib is the Python interface.
 
+I built this to learn how libraries like NumPy actually work. View semantics, stride-based transpose, BLAS dispatch for matrix ops. All the stuff you take for granted until you write it yourself.
+
 ## What This Demonstrates
 
 - View-based N-dimensional tensor architecture with constant-time transpose

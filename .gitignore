@@ -13,6 +13,7 @@ data/large/**
 .venv/
 *.so
 *.dylib
+Dockerfile
 
 setup.zsh.storage
 docs/private_docs/**
