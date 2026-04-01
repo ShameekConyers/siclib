@@ -1,7 +1,7 @@
 #pragma once
 
 #include <initializer_list>
-#include <exception>
+#include <stdexcept>
 #include <algorithm>
 #include <vector>
 

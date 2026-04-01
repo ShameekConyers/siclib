@@ -1,5 +1,5 @@
 #include "models_base.hpp"
-#include <exception>
+#include <stdexcept>
 #include <iostream>
 #include <utility>
 #include <unordered_map>

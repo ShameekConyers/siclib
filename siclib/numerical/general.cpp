@@ -1,7 +1,7 @@
 
 #include "general.hpp"
 #include <array>
-#include <exception>
+#include <stdexcept>
 #include <cmath>
 
 namespace sic

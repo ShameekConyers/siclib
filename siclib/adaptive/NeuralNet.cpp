@@ -1,7 +1,7 @@
 #include "NeuralNet.hpp"
 #include "../stats.hpp"
 #include <cassert>
-#include <exception>
+#include <stdexcept>
 #include <deque>
 #include <iostream>
 

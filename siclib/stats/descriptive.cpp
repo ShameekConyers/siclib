@@ -1,5 +1,5 @@
 #include "descriptive.hpp"
-#include <exception>
+#include <stdexcept>
 #include <functional>
 #include <iostream>
 
