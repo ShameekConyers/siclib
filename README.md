@@ -1,48 +1,86 @@
 # siclib
 
-A C++ library of various things - with a focus on math.
+A C++ scientific computation library with a focus on math. pysiclib is the Python interface.
 
-pysiclib is the python interface.
+## What This Demonstrates
 
-## Corresponding Project and Documentation
-Can be found here <a href ="https://shameekconyers.com/projects/siclib">here</a>
+- View-based N-dimensional tensor architecture with constant-time transpose
+- BLAS integration for matrix operations (Apple Accelerate on macOS, OpenBLAS on Linux)
+- Python interop via pybind11
+- N-dimensional broadcasting for element-wise operations
+- Functional composition of operations over tensor views
 
-## pysiclib -  Python Installation Instructions
+## Project and Documentation
 
-Make sure you have Andaconda and a C++ compiler installed on your system.
-If you don't have an Apple computer make sure you have installed OpenBlas.
+Can be found <a href="https://shameekconyers.com/projects/siclib">here</a>.
+
+A neural net demo using pysiclib can be found <a href="https://shameekconyers.com/projects/pysiclib_neuralnet_demo">here</a>.
+
+## Modules
+
+- **Linalg** - N-dimensional tensor with view semantics, matmul via BLAS, matrix inverse, transpose, squeeze/unsqueeze, slicing, and broadcasting
+- **Stats** - Moment generating function, mean, variance, standard deviation, skew, kurtosis, and random tensor generation
+- **Numerical** - Numerical differentiation, integration, equation solving, and initial value problem solver
+- **Adaptive** - Neural network implementation (ProtoNet) built on top of the tensor library
+- **Models** - OLS linear regression and K-nearest neighbors classification
+
+## pysiclib - Python Installation
+
+Requirements: a C++ compiler, CMake, and pybind11. On Linux you also need libopenblas-dev.
 
 ```shell
-$ conda install pybind11 &&
-  git clone https://github.com/ShameekConyers/siclib &&
-  cd siclib &&
-  pip install -r requirements.txt &&
-  python setup.py bdist_wheel &&
-  pip install dist/pysiclib-0.0.6-cp38-none-any.whl
-
-$ python
->>> import pysiclib
+git clone https://github.com/ShameekConyers/siclib
+cd siclib
+python -m venv .venv
+source .venv/bin/activate
+pip install pybind11 numpy
+pip install -e .
 ```
 
-Even though I have this uploaded to PyPi so you can install from
-just pip, i've been having issues with cross-platform getting builds
-working proprly - until then above is the most straightforward way
+```python
+>>> import pysiclib
+>>> from pysiclib import linalg, stats
 
-## Current Modules
+>>> my_matrix = [[[0, 1, 2], [3, 4, 5]],
+...              [[6, 7, 8], [9, 10, 11]]]
+>>> my_tensor = linalg.Tensor(my_matrix)
+>>> print(my_tensor)
 
-### Numerical
-A collection of various Numerical approximation methods
+Tensor:
+[[[0, 1, 2]
+  [3, 4, 5]]
+ [[6, 7, 8]
+  [9, 10, 11]]]
+Tensor Shape: [2, 2, 3]
 
-### Linalg
-A collection of various Linear Algebra operations and structures
+>>> # Tensors are views, so transpose runs in constant time
+>>> # and shares the underlying buffer
+>>> transposed = my_tensor.transpose()
+>>> print(transposed)
 
-### Stats
-A collection of various procedures from statistics
+Tensor:
+[[[0, 6]
+  [3, 9]]
+ [[1, 7]
+  [4, 10]]
+ [[2, 8]
+  [5, 11]]]
+Tensor Shape: [3, 2, 2]
 
-### Adaptive (name pending)
+>>> # Stats functions work over arbitrary dimensions
+>>> col_means = stats.find_mean(transposed, 1)
+>>> print(col_means)
 
-A collection of adaptive learning methods.
+Tensor:
+[[[1.5, 2.5, 3.5]]
+ [[7.5, 8.5, 9.5]]]
+Tensor Shape: [2, 1, 3]
+```
 
-### Models
+## Running Tests
 
-A collection of models for fitting data.
+```shell
+source .venv/bin/activate
+pip install pytest numpy scipy
+pytest tests/ -v
+```
