@@ -104,33 +104,9 @@ void ProtoNet::run_epoch(TensorView input, TensorView target_values)
 			.unary_op(learn_func);
 		TensorView delta_bias = error_vec[i].unary_op(learn_func);
 
-		// if (i != 0) {
-		// 	std::cerr << "YOU:\n";
-		// 	std::cerr << error_vec[i]
-		// 		.binary_element_wise_op(
-		// 			raw_output_vec[i].unitary_op(m_transform_deriv), std::multiplies());
-
-		// 	std::cerr << target;
-
-		// 	std::cerr <<
-		// 		error_vec[i]
-		// 		.binary_element_wise_op(
-		// 			raw_output_vec[i].unitary_op(m_transform_deriv), std::multiplies())
-		// 		.matmul(target);
-
-		// 	std::cerr << "\n";
-		// }
-
 		m_weights[i] = m_weights[i] + delta_weights;
 		m_bias[i] = m_bias[i] + delta_bias;
 	}
-
-
-	// std::cerr << "-------\n";
-	// std::cerr << target_values - output_vec.back();
-	// std::cerr << target_values;
-	// std::cerr << output_vec.back();
-	// std::cerr << "-------\n";
 }
 
 TensorView ProtoNet::query_net(TensorView input)

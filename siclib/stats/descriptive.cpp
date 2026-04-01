@@ -107,7 +107,6 @@ TensorView rand_normal_tensor(double mean,
 	result_data.reserve(cumul_prod);
 	for (size_t i = 0; i < cumul_prod; i++) {
 		result_data.push_back(distr(siclib_rng));
-		std::cerr << i << "...";
 	}
 
 	return TensorView{ result_data, shape };

@@ -12,3 +12,4 @@ dist
 data/large/**
 
 setup.zsh.storage
+docs/private_docs/**

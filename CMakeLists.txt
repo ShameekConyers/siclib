@@ -1,5 +1,3 @@
-set(CMAKE_CXX_COMPILER syclcc)
-
 cmake_minimum_required(VERSION 3.18)
 project(pysiclib LANGUAGES CXX)
 enable_testing()
